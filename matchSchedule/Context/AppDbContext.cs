@@ -10,10 +10,23 @@ namespace matchSchedule.Context
 
         }
 
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Match> Matches { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Coach> Coaches { get; set; }
+        public DbSet<PlayerTeamHistory> PlayerTeamsHistory { get; set; }
         public DbSet<User> Users { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Team>().ToTable("teams");
+            modelBuilder.Entity<Player>().ToTable("players");
+            modelBuilder.Entity<Match>().ToTable("matches");
+            modelBuilder.Entity<Tournament>().ToTable("tournaments");
+            modelBuilder.Entity<Coach>().ToTable("coaches");
+            modelBuilder.Entity<PlayerTeamHistory>().ToTable("playerTeamsHistory");
 
         }
     }
