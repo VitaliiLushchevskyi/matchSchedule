@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IdentityService } from '../services/identity.service';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { RouterModule, Routes } from '@angular/router';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import { HttpClientModule } from '@angular/common/http';
+import { NgToastModule } from 'ng-angular-popup';
+import { RouterModule, Routes } from '@angular/router';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,9 +21,11 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    NgToastModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
   ],
-  providers: [IdentityService],
+  providers: [AuthService],
   exports: [RouterModule],
 })
 export class IdentityModule {}

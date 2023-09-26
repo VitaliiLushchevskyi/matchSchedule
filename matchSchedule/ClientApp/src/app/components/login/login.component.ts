@@ -5,7 +5,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import ValidateForm from 'src/app/helpers/validateform';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +21,12 @@ export class LoginComponent implements OnInit {
   eyeIcon: string = 'fa-eye-slash';
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private toast: NgToastService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -35,6 +43,28 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (res) => {
+          this.loginForm.reset();
+
+          this.authService.storeToken(res.token);
+
+          this.toast.success({
+            detail: 'SUCCESS',
+            summary: res.message,
+            duration: 5000,
+          });
+
+          this.router.navigate(['']);
+        },
+        error: (err) => {
+          this.toast.error({
+            detail: 'ERROR',
+            summary: err.error.message,
+            duration: 5000,
+          });
+        },
+      });
     } else {
       ValidateForm.validateAllFormFields(this.loginForm);
     }

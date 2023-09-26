@@ -20,7 +20,7 @@ namespace matchSchedule.Services.Implements
 
         public async Task<User> GetUser(User userObj)
         {
-            return await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserName == userObj.UserName && u.Password == userObj.Password);
+            return await _appDbContext.Users.Where(u => u.UserName == userObj.UserName).FirstOrDefaultAsync();
         }
 
         public async Task<bool> SaveAllAsync()
