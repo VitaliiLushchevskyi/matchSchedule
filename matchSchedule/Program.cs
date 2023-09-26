@@ -1,8 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-
-using matchSchedule.Services.Interfaces;
 using matchSchedule.Context;
 using matchSchedule.Services.Implements;
+using matchSchedule.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

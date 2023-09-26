@@ -2,7 +2,6 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace matchSchedule.Controllers
@@ -28,12 +27,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok( await _teamService.GetAllAsync());
+                return Ok(await _teamService.GetAllAsync());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest("Failed to get teams!");           
+                return BadRequest("Failed to get teams!");
             }
         }
 
@@ -42,7 +41,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok( await _teamService.GetTeamByIdAsync(id));
+                return Ok(await _teamService.GetTeamByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -52,7 +51,7 @@ namespace matchSchedule.Controllers
         }
         [HttpPost]
         [Route("postNewTeam")]
-        public IActionResult Post([FromBody]TeamViewModel team)
+        public IActionResult Post([FromBody] TeamViewModel team)
         {
             try
             {
@@ -60,22 +59,45 @@ namespace matchSchedule.Controllers
                 {
                     var newTeam = _mapper.Map<TeamViewModel, Team>(team);
                     _teamService.AddEntity(newTeam);
-                    if (_teamService.SaveAll())
-                    {
-                        return Created($"/api/teams/{newTeam.TeamId}", _mapper.Map<Team, TeamViewModel>(newTeam));
-                    }
+
+                    return Created($"/api/teams/{newTeam.TeamId}", _mapper.Map<Team, TeamViewModel>(newTeam));
                 }
                 else
-                {
-                    return BadRequest(ModelState);
-                }
+                    return BadRequest(ModelState);              
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                
             }
+
             return BadRequest("Failed to post the team!");
+        }
+
+        [HttpPost]
+        [Route("{teamId:Guid}/addPlayer/{playerId:Guid}")]
+        public async Task<IActionResult> Post(Guid teamId, Guid playerId)
+        {
+            try
+            {
+                return Ok(await _teamService.AddPlayerAsync(teamId, playerId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to add player to the team!");
+            }
+        }
+
+        [HttpPost]
+        [Route("{teamId:Guid}/addListOfPlayers")]
+        public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)
+        {
+            var result = await _teamService.AddListOfPlayersAsync(teamId, playersIds);
+            if (result)
+                return Ok("Successful!");
+            else 
+                return BadRequest("Failed!");
+
         }
     }
 }

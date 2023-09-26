@@ -17,7 +17,7 @@ namespace matchSchedule.Context
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<PlayerTeamHistory> PlayerTeamsHistory { get; set; }
         public DbSet<User> Users { get; set; }
-       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");

@@ -1,6 +1,4 @@
-﻿using matchSchedule.Models;
-
-namespace matchSchedule.ViewModels
+﻿namespace matchSchedule.ViewModels
 {
     public class TeamViewModel
     {
@@ -9,6 +7,6 @@ namespace matchSchedule.ViewModels
         public string Country { get; set; }
         public int YearFounded { get; set; }
         public string Logo { get; set; }
-       
+
     }
 }

@@ -5,7 +5,7 @@ namespace matchSchedule.Models
     public class Player
     {
         [Key]
-        public Guid PlayerId  { get; set; }
+        public Guid PlayerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }

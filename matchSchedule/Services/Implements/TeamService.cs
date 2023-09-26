@@ -14,39 +14,79 @@ namespace matchSchedule.Services.Implements
         }
         public async Task<List<Team>> GetAllAsync()
         {
-            return await  _appDbContext.Teams
-                .Include(t=>t.Players)
-                .Include(t=>t.Coaches)
-                .Include(t=>t.TournamentsWon)
-                .Include(t=>t.Matches)
-                .OrderBy(t=>t.Name)
+            return await _appDbContext.Teams
+                .Include(t => t.Players)
+                .Include(t => t.Coaches)
+                .Include(t => t.TournamentsWon)
+                .Include(t => t.Matches)
+                .OrderBy(t => t.Name)
                 .ToListAsync();
         }
 
         public async Task<Team> GetTeamByIdAsync(Guid id)
         {
             return await _appDbContext.Teams
-                .Include(t=>t.Players)
-                .Include(t=>t.Coaches)
-                .Include(t=>t.TournamentsWon)
-                .Include(t=>t.Matches)
+                .Include(t => t.Players)
+                .Include(t => t.Coaches)
+                .Include(t => t.TournamentsWon)
+                .Include(t => t.Matches)
                 .Where(t => t.TeamId == id)
-                .FirstOrDefaultAsync();    
+                .FirstOrDefaultAsync();
         }
 
         public void AddEntity(object model)
         {
             _appDbContext.Add(model);
-
+            SaveAllAsync();
         }
         public void RemoveEntity(object model)
         {
             _appDbContext.Remove(model);
         }
 
-        public bool SaveAll()
+        public async Task<bool> SaveAllAsync()
         {
-            return _appDbContext.SaveChanges() > 0;
+            return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<Team> AddPlayerAsync(Guid teamId, Guid playerId)
+        {
+            var team = await GetTeamByIdAsync(teamId);
+            var player = await _appDbContext.Players.Where(p => p.PlayerId == playerId).FirstOrDefaultAsync();
+            team.Players.Add(player);
+            await SaveAllAsync();
+            return team;
+        }
+
+        public async Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds)
+        {
+            var team = await GetTeamByIdAsync(teamId);
+            if (team == null)
+            {
+                return false;
+            }
+
+            if (playersIds != null && playersIds.Count > 0)
+            {
+                var playersToAdd = await _appDbContext.Players
+                    .Where(p => playersIds.Contains(p.PlayerId))
+                    .ToListAsync();
+
+                if (playersToAdd.Count > 0)
+                {
+                    foreach (var player in playersToAdd)
+                    {
+                        team.Players.Add(player);
+                    }
+                    await SaveAllAsync();
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+
     }
 }
