@@ -50,7 +50,7 @@ namespace matchSchedule.Controllers
             }
         }
         [HttpPost]
-        [Route("postNewTeam")]
+        [Route("createTeam")]
         public IActionResult Post([FromBody] TeamViewModel team)
         {
             try
