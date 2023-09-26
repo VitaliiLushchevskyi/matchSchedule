@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Services.Implements
 {
-    public class PlayerService: IPlayerService
+    public class PlayerService : IPlayerService
     {
         private readonly AppDbContext _appDbContext;
         public PlayerService(AppDbContext appDbContext)
@@ -23,7 +23,7 @@ namespace matchSchedule.Services.Implements
         public async Task<Player> GetPlayerByIdAsync(Guid id)
         {
             return await _appDbContext.Players
-                .Include(p => p.TeamHistory)        
+                .Include(p => p.TeamHistory)
                 .Where(p => p.PlayerId == id)
                 .FirstOrDefaultAsync();
         }
@@ -31,7 +31,7 @@ namespace matchSchedule.Services.Implements
         public void AddEntity(object model)
         {
             _appDbContext.Add(model);
-            SaveAllAsync();
+            
         }
         public void RemoveEntity(object model)
         {
@@ -41,6 +41,11 @@ namespace matchSchedule.Services.Implements
         public async Task<bool> SaveAllAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public bool SaveAll()
+        {
+            return _appDbContext.SaveChanges() > 0;
         }
     }
 }

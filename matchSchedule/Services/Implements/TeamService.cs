@@ -37,7 +37,7 @@ namespace matchSchedule.Services.Implements
         public void AddEntity(object model)
         {
             _appDbContext.Add(model);
-            SaveAllAsync();
+
         }
         public void RemoveEntity(object model)
         {
@@ -48,6 +48,11 @@ namespace matchSchedule.Services.Implements
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+        public bool SaveAll()
+        {
+            return _appDbContext.SaveChanges() > 0;
+        }
+
 
         public async Task<Team> AddPlayerAsync(Guid teamId, Guid playerId)
         {

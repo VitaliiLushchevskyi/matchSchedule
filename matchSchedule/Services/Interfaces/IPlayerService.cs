@@ -8,6 +8,7 @@ namespace matchSchedule.Services.Interfaces
         Task<Player> GetPlayerByIdAsync(Guid id);
         void AddEntity(object model);
         Task<bool> SaveAllAsync();
+        bool SaveAll();
         void RemoveEntity(object model);
     }
 }

@@ -12,18 +12,18 @@ namespace matchSchedule.Controllers
     {
         private readonly ITeamService _teamService;
         private readonly ILogger<TeamController> _logger;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         public TeamController(ITeamService teamService, ILogger<TeamController> logger, IMapper mapper)
         {
             _teamService = teamService;
             _logger = logger;
-            _mapper = mapper;
+            _mapper = mapper
+            ;
         }
 
         [HttpGet]
-        [Route("getAllTeams")]
-        public async Task<IActionResult> Get()
+        [Route("all")]
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -49,8 +49,7 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get team!");
             }
         }
-        [HttpPost]
-        [Route("createTeam")]
+        [HttpPost("createTeam")]
         public IActionResult Post([FromBody] TeamViewModel team)
         {
             try
@@ -58,12 +57,15 @@ namespace matchSchedule.Controllers
                 if (ModelState.IsValid)
                 {
                     var newTeam = _mapper.Map<TeamViewModel, Team>(team);
-                    _teamService.AddEntity(newTeam);
 
-                    return Created($"/api/teams/{newTeam.TeamId}", _mapper.Map<Team, TeamViewModel>(newTeam));
+                    _teamService.AddEntity(newTeam);
+                    if (_teamService.SaveAll())
+                    {
+                        return Created($"/api/teams/{newTeam.TeamId}", _mapper.Map<Team, TeamViewModel>(newTeam));
+                    }
                 }
                 else
-                    return BadRequest(ModelState);              
+                    return BadRequest(ModelState);
             }
             catch (Exception ex)
             {
@@ -95,7 +97,7 @@ namespace matchSchedule.Controllers
             var result = await _teamService.AddListOfPlayersAsync(teamId, playersIds);
             if (result)
                 return Ok("Successful!");
-            else 
+            else
                 return BadRequest("Failed!");
 
         }

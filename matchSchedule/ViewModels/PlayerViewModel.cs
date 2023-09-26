@@ -11,9 +11,8 @@ namespace matchSchedule.ViewModels
         public string Country { get; set; }
         public double Height { get; set; }
         public double Weight { get; set; }
-        public Guid TeamId { get; set; }
-        public Team Team { get; set; }
         public string Position { get; set; }
         public int JerseyNumber { get; set; }
+        public Guid? TeamId { get; set; }
     }
 }

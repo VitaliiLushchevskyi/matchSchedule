@@ -59,8 +59,11 @@ namespace matchSchedule.Controllers
                 {
                     var newPlayer = _mapper.Map<PlayerViewModel, Player>(player);
                     _playerService.AddEntity(newPlayer);
-
-                    return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, PlayerViewModel>(newPlayer));
+                    if (_playerService.SaveAll())
+                    {
+                        return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, PlayerViewModel>(newPlayer));
+                    }
+                    
                 }
                 else
                     return BadRequest(ModelState);
