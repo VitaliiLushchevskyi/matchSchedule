@@ -27,16 +27,31 @@
           >
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
+          <li
+            class="nav-item"
+            *ngIf="isLoggedIn(); else loginTemplate"
+            [routerLinkActive]="['link-active']"
+          >
+            <a
+              class="nav-link text-dark"
+              [routerLink]="['/']"
+              (click)="logout()"
+              >Logout</a
             >
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
-          </li>
+
+          <ng-template #loginTemplate>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-dark" [routerLink]="['/login']"
+                >Sign In</a
+              >
+            </li>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-dark" [routerLink]="['/signup']"
+                >Sign Up</a
+              >
+            </li></ng-template
+          >
         </ul>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -8,9 +10,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   private baseUrl: string = 'https://localhost:7145/api/User/';
   private userPayload: any;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.userPayload = this.decodedToken();
   }
+
+ 
 
   signUp(userObj: any) {
     return this.http.post<any>(`${this.baseUrl}register`, userObj);
@@ -18,10 +22,12 @@ export class AuthService {
 
   signOut() {
     localStorage.removeItem('token');
+    this.router.navigate(['/']);
   }
 
   login(loginObj: any) {
     return this.http.post<any>(`${this.baseUrl}authenticate`, loginObj);
+    
   }
 
   storeToken(token: string) {
@@ -49,5 +55,4 @@ export class AuthService {
   getRoleFromToken() {
     if (this.userPayload) return this.userPayload.role;
   }
-
 }
