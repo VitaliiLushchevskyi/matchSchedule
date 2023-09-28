@@ -42,6 +42,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
