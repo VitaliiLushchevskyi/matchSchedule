@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgToastModule } from 'ng-angular-popup';
 import { RouterModule, Routes } from '@angular/router';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
+
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },

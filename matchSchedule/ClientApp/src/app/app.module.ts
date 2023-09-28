@@ -9,6 +9,7 @@ import { IdentityModule } from './components/identity.module';
 import { NgToastModule } from 'ng-angular-popup';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { PageModule } from './components/page.module';
 
 @NgModule({
   declarations: [AppComponent, NavMenuComponent, HomeComponent],
@@ -22,6 +23,7 @@ import { AuthGuard } from './guards/auth.guard';
       { path: '', component: HomeComponent, pathMatch: 'full' },
     ]),
     IdentityModule,
+    PageModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

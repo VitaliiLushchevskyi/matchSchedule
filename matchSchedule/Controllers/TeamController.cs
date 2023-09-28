@@ -22,8 +22,8 @@ namespace matchSchedule.Controllers
         }
 
         [HttpGet]
-        [Route("all")]
-        public async Task<IActionResult> GetAll()
+        [Route("teams")]
+        public async Task<IActionResult> Get()
         {
             try
             {
