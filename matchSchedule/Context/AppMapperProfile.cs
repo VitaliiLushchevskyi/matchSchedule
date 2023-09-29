@@ -17,6 +17,9 @@ namespace matchSchedule.Context
 
             CreateMap<Tournament, TournamentViewModel>()
                 .ForMember(t => t.TournamentId, m => m.MapFrom(t => t.Id)).ReverseMap();
+
+            CreateMap<Match, MatchViewModel>()
+                .ForMember(m => m.MatchId, mf => mf.MapFrom(m => m.MatchId)).ReverseMap();
         }
     }
 }

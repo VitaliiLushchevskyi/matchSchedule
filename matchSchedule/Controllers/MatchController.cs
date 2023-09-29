@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using matchSchedule.Models;
+using matchSchedule.Services.Interfaces;
+using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace matchSchedule.Controllers
 {
@@ -6,5 +10,69 @@ namespace matchSchedule.Controllers
     [ApiController]
     public class MatchController : ControllerBase
     {
+        private readonly IMatchService _service;
+        private readonly ILogger<MatchController> _logger;
+        private readonly IMapper _mapper;
+        public MatchController(IMatchService service, ILogger<MatchController> logger, IMapper mapper)
+        {
+            _service = service;
+            _logger = logger;
+            _mapper = mapper;
+
+        }
+
+        [HttpGet]
+        [Route("matches")]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                return Ok(await _service.GetAllAsync());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to get matches!");
+            }
+        }
+
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                return Ok(await _service.GetMatchByIdAsync(id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to get match!");
+            }
+        }
+        [HttpPost("createMatch")]
+        public IActionResult Post([FromBody] MatchViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var newModel = _mapper.Map<MatchViewModel, Match>(model);
+
+                    _service.AddEntity(newModel);
+                    if (_service.SaveAll())
+                    {
+                        return Created($"/api/match/{newModel.MatchId}", _mapper.Map<Match, MatchViewModel>(newModel));
+                    }
+                }
+                else
+                    return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return BadRequest("Failed to post the match!");
+        }
     }
 }

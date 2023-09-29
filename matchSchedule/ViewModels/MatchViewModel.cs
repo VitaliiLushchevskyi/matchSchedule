@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using matchSchedule.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace matchSchedule.Models
+namespace matchSchedule.ViewModels
 {
-    public class Match
+    public class MatchViewModel
     {
         [Key]
         public Guid MatchId { get; set; }
@@ -14,6 +15,5 @@ namespace matchSchedule.Models
         public int AwayTeamGoals { get; set; }
         public string Referee { get; set; }
         public string MatchStatus { get; set; }
-
     }
 }
