@@ -10,6 +10,9 @@ import { NgToastModule } from 'ng-angular-popup';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { PageModule } from './components/page.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, NavMenuComponent, HomeComponent],
@@ -24,6 +27,8 @@ import { PageModule } from './components/page.module';
     ]),
     IdentityModule,
     PageModule,
+    MatExpansionModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

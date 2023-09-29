@@ -1,0 +1,21 @@
+<div>
+  <mat-accordion>
+    <mat-expansion-panel
+      *ngFor="let t of tournaments"
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="/assets/img/{{ t.id }}.jpg" class="" /> &emsp;
+          {{ t.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ t.location }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>Тут будуть матчі</p>
+      <!-- <p>{{t.matches.}}</p> -->
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

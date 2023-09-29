@@ -36,7 +36,6 @@ namespace matchSchedule.Controllers
         }
 
         [HttpGet("{id:Guid}")]
-        [Route("tournament/{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -75,4 +74,6 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the tournament!");
         }
     }
+
+
 }
