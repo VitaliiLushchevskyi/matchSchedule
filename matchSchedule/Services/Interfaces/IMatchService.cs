@@ -6,6 +6,8 @@ namespace matchSchedule.Services.Interfaces
     {
         Task<List<Match>> GetAllAsync();
         Task<Match> GetMatchByIdAsync(Guid id);
+        Tournament GetTournamentById(Guid id);
+        Team GetTeamById(Guid id);
         void AddEntity(object model);
         Task<bool> SaveAllAsync();
         bool SaveAll();

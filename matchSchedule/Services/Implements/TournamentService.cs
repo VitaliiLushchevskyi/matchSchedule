@@ -17,6 +17,9 @@ namespace matchSchedule.Services.Implements
             return await _appDbContext.Tournaments
                 .Include(t => t.Teams)
                 .Include(t => t.Matches)
+                    .ThenInclude(i => i.HomeTeam)
+                .Include(t => t.Matches)
+                    .ThenInclude(i => i.AwayTeam)
                 .OrderBy(t => t.Name)
                 .ToListAsync();
         }

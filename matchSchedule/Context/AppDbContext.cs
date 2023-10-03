@@ -28,6 +28,18 @@ namespace matchSchedule.Context
             modelBuilder.Entity<Coach>().ToTable("coaches");
             modelBuilder.Entity<PlayerTeamHistory>().ToTable("playerTeamsHistory");
 
+            modelBuilder.Entity<Match>()
+            .HasOne(m => m.HomeTeam)
+            .WithMany()
+            .HasForeignKey(m => m.HomeTeamId)
+            .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Match>()
+                .HasOne(m => m.AwayTeam)
+                .WithMany()
+                .HasForeignKey(m => m.AwayTeamId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

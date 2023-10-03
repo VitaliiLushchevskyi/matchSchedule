@@ -10,8 +10,11 @@ export class TeamService {
   private baseUrl: string = 'https://localhost:7145/api/Team/';
   constructor(private http: HttpClient) {}
 
-  loadTeams() : Observable<Team[]>{
-    return this.http.get<Team[]>(`${this.baseUrl}/teams`);
+  loadTeams(): Observable<Team[]> {
+    return this.http.get<Team[]>(`${this.baseUrl}teams`);
   }
 
+  loadTeamById(id: string): Observable<Team> {
+    return this.http.get<Team>(`${this.baseUrl}` + id);
+  }
 }

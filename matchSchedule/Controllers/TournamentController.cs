@@ -55,6 +55,7 @@ namespace matchSchedule.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    
                     var newModel = _mapper.Map<TournamentViewModel, Tournament>(model);
 
                     _service.AddEntity(newModel);

@@ -1,0 +1,64 @@
+img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  position: relative;
+}
+.teamLogo {
+  width: 24px;
+  height: 24px;
+  border-radius: 90%;
+  object-fit: scale-down;
+}
+
+.item-list {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Ширина всього блоку */
+}
+
+.left-a,
+.right-a {
+  width: 30%; /* Фіксована ширина для бокових <a> елементів */
+  text-align: center; /* Центрування тексту в середині <a> елементів */
+}
+
+.center-a {
+  width: 40%; /* Більша ширина для центрального <a> елемента */
+  text-align: center; /* Центрування тексту в середині <a> елемента */
+}
+
+/* .item-list {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; 
+}
+
+.item-list a {
+  width: 30%; 
+  text-align: center; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+} */
+
+/* a {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 50px; простір між елементами
+} */
+/* .right-a {
+  padding-left: 10%;
+  text-align: right;
+  align-items: center;
+}
+.left-a {
+  padding-right: 10%;
+  text-align: left;
+  align-items: center;
+}
+.center-a {
+  position: relative;
+  text-align: center;
+} */

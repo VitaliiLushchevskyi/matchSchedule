@@ -8,6 +8,6 @@ export class Tournament {
   startDate: string;
   endDate: string;
   description: string;
-  matches: Match[];
+  matches: Match[] = [];
   teams: Team[];
 }

@@ -56,8 +56,16 @@ namespace matchSchedule.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var newModel = _mapper.Map<MatchViewModel, Match>(model);
+                    var tournament = _service.GetTournamentById(model.Tournament.Id);
+                    var homeTeam = _service.GetTeamById(model.HomeTeamId);
+                    var awayTeam = _service.GetTeamById(model.AwayTeamId);
 
+
+                    var newModel = _mapper.Map<MatchViewModel, Match>(model);
+                    newModel.Tournament = tournament;
+                    newModel.HomeTeam = homeTeam;
+                    newModel.AwayTeam = awayTeam;
+                    
                     _service.AddEntity(newModel);
                     if (_service.SaveAll())
                     {

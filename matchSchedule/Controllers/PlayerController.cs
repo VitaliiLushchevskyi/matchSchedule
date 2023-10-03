@@ -22,7 +22,7 @@ namespace matchSchedule.Controllers
         }
 
         [HttpGet]
-        [Route("getAllPlayers")]
+        [Route("players")]
         public async Task<IActionResult> Get()
         {
             try
@@ -62,8 +62,7 @@ namespace matchSchedule.Controllers
                     if (_playerService.SaveAll())
                     {
                         return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, PlayerViewModel>(newPlayer));
-                    }
-                    
+                    }    
                 }
                 else
                     return BadRequest(ModelState);

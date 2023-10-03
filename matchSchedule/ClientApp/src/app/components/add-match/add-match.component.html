@@ -1,0 +1,83 @@
+<div class="container">
+  <h2>Add New Match</h2>
+  <form [formGroup]="matchForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="selectedHomeTeam">Select Home Team:</label>
+      <select
+        class="form-control"
+        id="selectedHomeTeam"
+        (change)="onTeamSelected('homeTeam', $event)"
+      >
+        <option value="">-Select a team-</option>
+        <option *ngFor="let team of teams" [value]="team.teamId">
+          {{ team.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="selectedAwayTeam">Select Away Team:</label>
+      <select
+        class="form-control"
+        id="selectedAwayTeam"
+        (change)="onTeamSelected('awayTeam', $event)"
+      >
+        <option value="">-Select a team-</option>
+        <option *ngFor="let team of teams" [value]="team.teamId">
+          {{ team.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="matchDateTime">Date:</label>
+      <input
+        type="datetime-local"
+        formControlName="matchDateTime"
+        class="form-control"
+        id="matchDateTime"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="tournament">Tournament:</label>
+      <select formControlName="tournament" class="form-control" id="tournament">
+        <option *ngFor="let tournament of tournaments" [ngValue]="tournament">
+          {{ tournament.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="matchDateTime">Date:</label>
+      <input
+        type="text"
+        formControlName="matchDateTime"
+        class="form-control"
+        id="matchDateTime"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="referee">Referee:</label>
+      <input
+        type="text"
+        formControlName="referee"
+        class="form-control"
+        id="referee"
+      />
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="matchStatus">Match Status:</label>
+      <input
+        type="text"
+        formControlName="matchStatus"
+        class="form-control"
+        id="matchStatus"
+      />
+    </div> -->
+    <button type="submit" class="btn btn-primary">Add Match</button>
+  </form>
+</div>

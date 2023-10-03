@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TournamentService } from 'src/app/services/tournament.service';
+import { Match } from 'src/app/shared/match';
 import { Tournament } from 'src/app/shared/tournament';
 
 @Component({
@@ -9,6 +10,7 @@ import { Tournament } from 'src/app/shared/tournament';
 })
 export class TournamentsListComponent implements OnInit {
   tournaments: Tournament[] = [];
+  
   constructor(private service: TournamentService) {}
   panelOpenState = false;
 
