@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from 'src/app/services/team.service';
 import { Team } from 'src/app/shared/team';
@@ -14,6 +15,7 @@ export class TeamPageComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private service: TeamService
   ) {}
+
   ngOnInit(): void {
     let teamId = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.service.loadTeamById(teamId).subscribe((data) => {

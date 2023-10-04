@@ -1,4 +1,6 @@
 .logo {
-  height: 70px;
+  border-radius: 0%;
+  object-fit: scale-down;
+  height: 80px;
   width: 60px;
 }

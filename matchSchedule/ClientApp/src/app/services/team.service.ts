@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Team } from '../shared/team';
 
 @Injectable({
@@ -17,4 +17,5 @@ export class TeamService {
   loadTeamById(id: string): Observable<Team> {
     return this.http.get<Team>(`${this.baseUrl}` + id);
   }
+
 }

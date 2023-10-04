@@ -13,6 +13,11 @@ import { TeamPageComponent } from './team-page/team-page.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
 
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { TeamPlayersListComponent } from './team-page/team-players-list/team-players-list.component';
+import { CalculateAgePipe } from '../pipes/age.pipe';
+
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
   { path: 'teams/:id', component: TeamPageComponent },
@@ -28,6 +33,8 @@ const routes: Routes = [
     AddMatchComponent,
     TeamPageComponent,
     PlayerInfoComponent,
+    TeamPlayersListComponent,
+    CalculateAgePipe
   ],
   imports: [
     CommonModule,
@@ -35,7 +42,11 @@ const routes: Routes = [
     MatExpansionModule,
     ReactiveFormsModule,
     NgSelectModule,
-    NgxMatDatetimePickerModule
+    NgxMatDatetimePickerModule,
+    MatTableModule,
+    MatSortModule
+    
+    
   ],
   providers: [TeamService, TournamentService],
 })

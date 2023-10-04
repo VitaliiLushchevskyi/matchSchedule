@@ -1,0 +1,97 @@
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  (matSortChange)="announceSortChange($event)"
+  class="mat-elevation-z8"
+>
+  <ng-container matColumnDef="jerseyNumber">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by jerseyNumber"
+    >
+      No.
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.jerseyNumber }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by name">
+      Name
+    </th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.lastName }}
+      {{ element.firstName }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="age">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by age"
+    >
+      Age
+    </th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.dateOfBirth | calculateAge }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="country">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Country"
+    >
+      Country
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <img class="flag" src="/assets/img/countries/{{ element.country }}.png" />
+      {{ element.country }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="position">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Position"
+    >
+      Position
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="height">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by height"
+    >
+      Height
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.height }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="weight">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by weight"
+    >
+      Weight
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
