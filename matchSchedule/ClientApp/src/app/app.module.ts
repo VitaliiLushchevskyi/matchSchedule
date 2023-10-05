@@ -13,6 +13,8 @@ import { PageModule } from './components/page.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 
 @NgModule({
   declarations: [AppComponent, NavMenuComponent, HomeComponent],
@@ -29,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PageModule,
     MatExpansionModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
     
   ],
   providers: [],

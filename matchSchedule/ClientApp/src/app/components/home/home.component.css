@@ -1,0 +1,26 @@
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 800px; /* Задайте максимальну ширину меню, яка вам потрібна */
+  margin: 0 auto; /* Центрування меню на сторінці */
+}
+
+.menu-item {
+  width: 45%; /* Ширина кожного об'єкта меню (приблизно половина від ширини контейнера) */
+  margin: 10px;
+  text-align: center;
+}
+
+.menu-item img {
+  border-radius: 10%;
+  width: 310px; /* Задайте ширину та висоту для іконок (змініть на ваш вигляд) */
+  height: 210px;
+  margin-bottom: 10px; /* Відступ між іконкою та текстом */
+}
+
+.menu-item a {
+  text-decoration: none;
+  font-size: 28px;
+  color: #333; /* Колір тексту для об'єктів меню */
+}

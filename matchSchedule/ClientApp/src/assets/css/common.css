@@ -58,6 +58,11 @@ img {
   border-radius: 50%;
   position: relative;
 }
+.flag {
+  height: 16px;
+  width: 16px;
+  border-radius: 0%;
+}
 .bordert {
   border-top: 1px solid #aaa;
   position: relative;

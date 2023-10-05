@@ -26,7 +26,8 @@ namespace matchSchedule.Services.Implements
         public async Task<Team> GetTeamByIdAsync(Guid id)
         {
             return await _appDbContext.Teams
-                .Include(t => t.Players.OrderBy(p=>p.LastName))
+                .Include(t => t.Players
+                    .OrderBy(p=>p.LastName))
                 .Include(t => t.Coaches)
                 .Include(t => t.TournamentsWon)
                 .Include(t => t.Matches)

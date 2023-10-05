@@ -1,3 +1,7 @@
+.panel-title {
+  font-size: 18px;
+}
+
 img {
   width: 40px;
   height: 40px;
@@ -5,6 +9,14 @@ img {
   border-radius: 50%;
   position: relative;
 }
+
+.flag {
+  height: 16px;
+  width: 16px;
+  margin-right: 6px;
+  border-radius: 0%;
+}
+
 .teamLogo {
   width: 24px;
   height: 24px;
@@ -14,14 +26,27 @@ img {
 
 .item-list {
   display: flex;
+  justify-content: space-around;
+
+  /* width: 100%; */
+}
+
+.item {
+  display: flex;
   justify-content: space-between;
-  width: 100%; /* Ширина всього блоку */
+  width: 100%;
+  border-bottom: 2px solid;
+  margin-bottom: 10px;
+  font-size: medium;
 }
 
 .left-a,
 .right-a {
+  text-decoration: none;
   width: 30%; /* Фіксована ширина для бокових <a> елементів */
   text-align: center; /* Центрування тексту в середині <a> елементів */
+  color: rgb(62, 0, 232);
+  font-size: 15px bold;
 }
 
 .center-a {
@@ -29,36 +54,11 @@ img {
   text-align: center; /* Центрування тексту в середині <a> елемента */
 }
 
-/* .item-list {
-  display: flex;
-  justify-content: space-between;
-  width: 100%; 
+.links {
+  margin-top: 20px;
 }
 
-.item-list a {
-  width: 30%; 
-  text-align: center; 
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-} */
-
-/* a {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 50px; простір між елементами
-} */
-/* .right-a {
-  padding-left: 10%;
-  text-align: right;
-  align-items: center;
+.link {
+  margin-right: 20px;
+  color: rgb(59, 57, 57);
 }
-.left-a {
-  padding-right: 10%;
-  text-align: left;
-  align-items: center;
-}
-.center-a {
-  position: relative;
-  text-align: center;
-} */

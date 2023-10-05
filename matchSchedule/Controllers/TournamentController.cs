@@ -48,7 +48,7 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get tournament!");
             }
         }
-        [HttpPost("addTournament")]
+        [HttpPost("new")]
         public IActionResult Post([FromBody] TournamentViewModel model)
         {
             try

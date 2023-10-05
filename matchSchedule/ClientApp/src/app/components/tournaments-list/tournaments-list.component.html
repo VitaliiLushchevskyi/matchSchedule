@@ -1,4 +1,4 @@
-<div>
+<div class="wrapper">
   <mat-accordion>
     <mat-expansion-panel
       *ngFor="let t of tournaments"
@@ -6,34 +6,45 @@
       (closed)="panelOpenState = false"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          <img src="/assets/img/{{ t.id }}.jpg" class="" /> &emsp;
+        <mat-panel-title class="panel-title">
+          <img src="/assets/img/tournaments/{{ t.id }}.jpg" class="" /> &emsp;
           {{ t.name }}
         </mat-panel-title>
         <mat-panel-description>
+          <img class="flag" src="/assets/img/countries/{{ t.location }}.png" />
           {{ t.location }}
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div *ngFor="let m of t.matches" class="item-list">
-        <a [routerLink]="['/teams', m.homeTeam.teamId]" class="left-a">
-          <img
-            src="/assets/img/teamLogo/{{ m.homeTeam.logo }}"
-            class="teamLogo"
-          />{{ m.homeTeam.name }}
-        </a>
+        <div class="item">
+          <a [routerLink]="['/teams', m.homeTeam.teamId]" class="left-a">
+            <img
+              src="/assets/img/teamLogo/{{ m.homeTeam.logo }}"
+              class="teamLogo"
+            />{{ m.homeTeam.name }}
+          </a>
 
-        <a class="center-a">{{
-          m.matchDateTime | date : "MMM dd, yyyy 'at' hh:mm a"
-        }}</a>
+          <p class="center-a">
+            {{ m.matchDateTime | date : "MMM dd, yyyy 'at' hh:mm a" }}
+          </p>
 
-        <a [routerLink]="['/teams', m.awayTeam.teamId]" class="right-a">
-          <img
-            src="/assets/img/teamLogo/{{ m.awayTeam.logo }}"
-            class="teamLogo"
-          />
-          {{ m.awayTeam.name }}
-        </a>
+          <a [routerLink]="['/teams', m.awayTeam.teamId]" class="right-a">
+            <img
+              src="/assets/img/teamLogo/{{ m.awayTeam.logo }}"
+              class="teamLogo"
+            />
+            {{ m.awayTeam.name }}
+          </a>
+        </div>
+        <br />
+        <br />
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <div class="links">
+    <span>
+      <a class="link" [routerLink]="['/matches/new']">New Match </a>
+      <a class="link" [routerLink]="['/tournaments/new']"> New Tournament</a>
+    </span>
+  </div>
 </div>

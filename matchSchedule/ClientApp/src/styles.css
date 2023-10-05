@@ -23,9 +23,16 @@ code {
 
 html,
 body {
-  height: 100%;
-}
-body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  min-height: 100vh;
 }
+footer {
+  margin-top: 20px;
+}
+
+/* @import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '@fortawesome/fontawesome-free/scss/solid.scss';
+@import '@fortawesome/fontawesome-free/scss/regular.scss';
+@import '@fortawesome/fontawesome-free/scss/brands.scss';
+  */
