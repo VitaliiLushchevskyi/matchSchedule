@@ -1,0 +1,41 @@
+<form [formGroup]="teamForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Name of the team</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Country</mat-label>
+    <input matInput formControlName="country" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Year Founded</mat-label>
+    <input matInput formControlName="yearFounded" type="number" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Logo</mat-label>
+    <input matInput formControlName="logo" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select Players</mat-label>
+    <mat-select formControlName="playerIds" multiple>
+      <mat-select-trigger>
+        {{
+          teamForm.get("playerIds")?.value
+            ? teamForm.get("playerIds")?.value.length + " players selected"
+            : "Select players"
+        }}
+      </mat-select-trigger>
+      <mat-option *ngFor="let player of players" [value]="player.playerId">
+        {{ player.firstName }} {{ player.lastName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    Create Tournament
+  </button>
+</form>

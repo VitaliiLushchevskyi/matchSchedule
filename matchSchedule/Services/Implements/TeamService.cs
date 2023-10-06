@@ -31,7 +31,7 @@ namespace matchSchedule.Services.Implements
                 .Include(t => t.Coaches)
                 .Include(t => t.TournamentsWon)
                 .Include(t => t.Matches)
-                .Where(t => t.TeamId == id)
+                .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();
         }
 
@@ -93,6 +93,9 @@ namespace matchSchedule.Services.Implements
             return false;
         }
 
-
+        public async Task<List<Player>> GetPlayersByIdsAsync(ICollection<Guid> ids)
+        {
+            return await _appDbContext.Players.Where(player => ids.Contains(player.PlayerId)).ToListAsync();
+        }
     }
 }

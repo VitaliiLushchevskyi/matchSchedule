@@ -5,7 +5,7 @@ namespace matchSchedule.Models
     public class Team
     {
         [Key]
-        public Guid TeamId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
         public int YearFounded { get; set; }

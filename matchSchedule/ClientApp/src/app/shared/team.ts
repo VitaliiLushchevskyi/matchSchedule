@@ -4,7 +4,7 @@ import { Player } from './player';
 import { Tournament } from './tournament';
 
 export class Team {
-  teamId: string;
+  id: string;
   name: string;
   country: string;
   yearFounded: number | null;

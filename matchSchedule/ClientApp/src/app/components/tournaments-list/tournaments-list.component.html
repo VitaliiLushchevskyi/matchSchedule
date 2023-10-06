@@ -17,7 +17,7 @@
       </mat-expansion-panel-header>
       <div *ngFor="let m of t.matches" class="item-list">
         <div class="item">
-          <a [routerLink]="['/teams', m.homeTeam.teamId]" class="left-a">
+          <a [routerLink]="['/teams', m.homeTeam.id]" class="left-a">
             <img
               src="/assets/img/teamLogo/{{ m.homeTeam.logo }}"
               class="teamLogo"
@@ -28,7 +28,7 @@
             {{ m.matchDateTime | date : "MMM dd, yyyy 'at' hh:mm a" }}
           </p>
 
-          <a [routerLink]="['/teams', m.awayTeam.teamId]" class="right-a">
+          <a [routerLink]="['/teams', m.awayTeam.id]" class="right-a">
             <img
               src="/assets/img/teamLogo/{{ m.awayTeam.logo }}"
               class="teamLogo"
@@ -48,3 +48,4 @@
     </span>
   </div>
 </div>
+

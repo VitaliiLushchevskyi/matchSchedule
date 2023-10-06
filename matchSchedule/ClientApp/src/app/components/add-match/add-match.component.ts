@@ -57,12 +57,12 @@ export class AddMatchComponent {
   onTeamSelected(teamType: string, event: Event) {
     const selectedTeamId = (event.target as HTMLSelectElement).value;
     const selectedTeam = this.teams.find(
-      (team) => team.teamId === selectedTeamId
+      (team) => team.id === selectedTeamId
     );
     if (selectedTeam) {
       this.matchForm.patchValue({
         [teamType]: selectedTeam, // встановлюємо homeTeam або awayTeam в залежності від teamType
-        [teamType + 'Id']: selectedTeam.teamId, // встановлюємо homeTeamId або awayTeamId в залежності від teamType
+        [teamType + 'Id']: selectedTeam.id, // встановлюємо homeTeamId або awayTeamId в залежності від teamType
       });
     }
   }

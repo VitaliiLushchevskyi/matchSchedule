@@ -52,5 +52,9 @@ namespace matchSchedule.Services.Implements
             return _appDbContext.SaveChanges() > 0;
         }
 
+        public async Task<List<Team>> GetTeamsByIdAsync(ICollection<Guid> guids)
+        {
+            return await _appDbContext.Teams.Where(teams => guids.Contains(teams.Id)).ToListAsync();
+        }
     }
 }

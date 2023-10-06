@@ -43,7 +43,7 @@ namespace matchSchedule.Services.Implements
                 .Include(t => t.Coaches)
                 .Include(t => t.TournamentsWon)
                 .Include(t => t.Matches)
-                .Where(t => t.TeamId == id)
+                .Where(t => t.Id == id)
                 .FirstOrDefault();
         }
 

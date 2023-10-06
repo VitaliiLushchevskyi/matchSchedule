@@ -12,8 +12,8 @@ export class TeamsComponent implements OnInit {
   constructor(private service: TeamService) {}
 
   ngOnInit(): void {
-    this.service.loadTeams().subscribe((data) => {
-      this.teams = data;
-    });
+    // this.service.loadTeams().subscribe((data) => {
+    //   this.teams = data;
+    // });
   }
 }

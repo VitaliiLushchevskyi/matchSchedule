@@ -49,19 +49,20 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get team!");
             }
         }
-        [HttpPost("createTeam")]
-        public IActionResult Post([FromBody] TeamViewModel team)
+        [HttpPost("new")]
+        public async Task<IActionResult> Post([FromBody] TeamViewModel team)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var players = await _teamService.GetPlayersByIdsAsync(team.PlayerIds);
                     var newTeam = _mapper.Map<TeamViewModel, Team>(team);
-
+                    newTeam.Players = players;
                     _teamService.AddEntity(newTeam);
                     if (_teamService.SaveAll())
                     {
-                        return Created($"/api/teams/{newTeam.TeamId}", _mapper.Map<Team, TeamViewModel>(newTeam));
+                        return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, TeamViewModel>(newTeam));
                     }
                 }
                 else

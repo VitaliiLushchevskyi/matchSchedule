@@ -7,6 +7,7 @@
         public string Country { get; set; }
         public int YearFounded { get; set; }
         public string Logo { get; set; }
+        public ICollection<Guid> PlayerIds { get; set; }
 
     }
 }

@@ -49,15 +49,15 @@ namespace matchSchedule.Controllers
             }
         }
         [HttpPost("new")]
-        public IActionResult Post([FromBody] TournamentViewModel model)
+        public async Task<IActionResult> Post([FromBody] TournamentViewModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    
+                    var teams = await _service.GetTeamsByIdAsync(model.TeamIds);
                     var newModel = _mapper.Map<TournamentViewModel, Tournament>(model);
-
+                    newModel.Teams = teams;
                     _service.AddEntity(newModel);
                     if (_service.SaveAll())
                     {

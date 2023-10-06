@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tournament } from '../shared/tournament';
+import { TournamentViewModel } from '../shared/tournamentViewModel';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +13,9 @@ export class TournamentService {
 
   loadTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.baseUrl}/tournaments`);
+  }
+
+  createTournament(model: TournamentViewModel): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/new`, model);
   }
 }

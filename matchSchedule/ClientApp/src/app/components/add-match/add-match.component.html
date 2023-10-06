@@ -9,7 +9,7 @@
         (change)="onTeamSelected('homeTeam', $event)"
       >
         <option value="">-Select a team-</option>
-        <option *ngFor="let team of teams" [value]="team.teamId">
+        <option *ngFor="let team of teams" [value]="team.id">
           {{ team.name }}
         </option>
       </select>
@@ -23,7 +23,7 @@
         (change)="onTeamSelected('awayTeam', $event)"
       >
         <option value="">-Select a team-</option>
-        <option *ngFor="let team of teams" [value]="team.teamId">
+        <option *ngFor="let team of teams" [value]="team.id">
           {{ team.name }}
         </option>
       </select>
@@ -49,16 +49,6 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="matchDateTime">Date:</label>
-      <input
-        type="text"
-        formControlName="matchDateTime"
-        class="form-control"
-        id="matchDateTime"
-        required
-      />
-    </div>
     <div class="form-group">
       <label for="referee">Referee:</label>
       <input

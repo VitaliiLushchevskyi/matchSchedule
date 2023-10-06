@@ -13,16 +13,26 @@ import { TeamPageComponent } from './team-page/team-page.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
 
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { TeamPlayersListComponent } from './team-page/team-players-list/team-players-list.component';
 import { CalculateAgePipe } from '../pipes/age.pipe';
+import { NewTournamentComponent } from './tournaments-list/new-tournament/new-tournament.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { NewTeamComponent } from './teams/new-team/new-team.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
+  { path: 'teams/new', component: NewTeamComponent },
   { path: 'teams/:id', component: TeamPageComponent },
   { path: 'players/:id', component: PlayerInfoComponent },
   { path: 'tournaments', component: TournamentsListComponent },
+  { path: 'tournaments/new', component: NewTournamentComponent },
   { path: 'matches/new', component: AddMatchComponent },
 ];
 
@@ -34,7 +44,9 @@ const routes: Routes = [
     TeamPageComponent,
     PlayerInfoComponent,
     TeamPlayersListComponent,
-    CalculateAgePipe
+    CalculateAgePipe,
+    NewTournamentComponent,
+    NewTeamComponent,
   ],
   imports: [
     CommonModule,
@@ -44,9 +56,13 @@ const routes: Routes = [
     NgSelectModule,
     NgxMatDatetimePickerModule,
     MatTableModule,
-    MatSortModule
-    
-    
+    MatSortModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
   ],
   providers: [TeamService, TournamentService],
 })
