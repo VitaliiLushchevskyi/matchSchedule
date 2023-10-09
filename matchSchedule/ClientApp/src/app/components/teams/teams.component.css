@@ -1,0 +1,32 @@
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+}
+
+.no-results-message {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+.filter {
+  width: 100%;
+}
+.teamLogo {
+  border-radius: 0%;
+  /* max-width: 100%;
+  height: auto; */
+  object-fit: scale-down;
+}
+.paginator {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  right: 30%;
+}
+table th,
+td {
+  text-align: center;
+}

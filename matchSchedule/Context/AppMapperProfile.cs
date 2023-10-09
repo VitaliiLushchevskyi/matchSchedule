@@ -9,7 +9,7 @@ namespace matchSchedule.Context
         public AppMapperProfile()
         {
             CreateMap<Team, TeamViewModel>()
-                .ForMember(t => t.TeamId, m => m.MapFrom(t => t.Id))         
+                .ForMember(t => t.TeamId, m => m.MapFrom(t => t.Id))
                 .ReverseMap();
 
             CreateMap<Player, PlayerViewModel>()

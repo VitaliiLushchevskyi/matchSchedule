@@ -18,4 +18,8 @@ export class TournamentService {
   createTournament(model: TournamentViewModel): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/new`, model);
   }
+
+  deleteTournament(id: string) {
+    return this.http.delete(`${this.baseUrl}/` + id);
+  }
 }

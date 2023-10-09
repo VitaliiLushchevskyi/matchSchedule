@@ -74,7 +74,35 @@ namespace matchSchedule.Controllers
 
             return BadRequest("Failed to post the tournament!");
         }
+
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {                 
+                    var tournament = await _service.GetTournamentByIdAsync(id);
+                    
+                    if (tournament == null)
+                        return NotFound($"The tournament with id: {id} wasn`t found");
+                    _service.RemoveEntity(tournament);
+                    if (_service.SaveAll())
+                        return NoContent();
+                }
+                else
+                    return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return BadRequest("Failed to delete the tournament!");
+        }
+
     }
-
-
 }
+
+
+

@@ -65,7 +65,7 @@ namespace matchSchedule.Controllers
                     newModel.Tournament = tournament;
                     newModel.HomeTeam = homeTeam;
                     newModel.AwayTeam = awayTeam;
-                    
+
                     _service.AddEntity(newModel);
                     if (_service.SaveAll())
                     {

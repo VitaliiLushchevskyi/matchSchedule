@@ -31,7 +31,7 @@ namespace matchSchedule.Services.Implements
         public void AddEntity(object model)
         {
             _appDbContext.Add(model);
-            
+
         }
         public void RemoveEntity(object model)
         {

@@ -62,3 +62,22 @@ img {
   margin-right: 20px;
   color: rgb(59, 57, 57);
 }
+.control-buttons {
+  width: 50%;
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.control-buttons button {
+  position: relative;
+  display: block;
+  right: 0%;
+}
+.description p {
+  width: 40%;
+  color: brown;
+  margin-right: 10%;
+  position: relative;
+  text-align: center;
+}

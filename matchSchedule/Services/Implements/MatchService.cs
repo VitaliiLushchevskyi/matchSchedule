@@ -14,10 +14,10 @@ namespace matchSchedule.Services.Implements
         }
         public async Task<List<Match>> GetAllAsync()
         {
-            return await _appDbContext.Matches  
-                .Include(m=>m.AwayTeam)
-                .Include(m=>m.HomeTeam)
-                .Include(m=>m.Tournament)
+            return await _appDbContext.Matches
+                .Include(m => m.AwayTeam)
+                .Include(m => m.HomeTeam)
+                .Include(m => m.Tournament)
                 .ToListAsync();
         }
 
@@ -27,7 +27,7 @@ namespace matchSchedule.Services.Implements
                 .Where(m => m.MatchId == id)
                 .FirstOrDefaultAsync();
         }
-        public  Tournament GetTournamentById(Guid id)
+        public Tournament GetTournamentById(Guid id)
         {
             return _appDbContext.Tournaments
                 .Include(t => t.Teams)
@@ -38,7 +38,7 @@ namespace matchSchedule.Services.Implements
 
         public Team GetTeamById(Guid id)
         {
-            return  _appDbContext.Teams
+            return _appDbContext.Teams
                 .Include(t => t.Players)
                 .Include(t => t.Coaches)
                 .Include(t => t.TournamentsWon)

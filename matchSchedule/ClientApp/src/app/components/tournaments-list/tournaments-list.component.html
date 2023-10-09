@@ -10,9 +10,14 @@
           <img src="/assets/img/tournaments/{{ t.id }}.jpg" class="" /> &emsp;
           {{ t.name }}
         </mat-panel-title>
-        <mat-panel-description>
+        <mat-panel-description class="description">
           <img class="flag" src="/assets/img/countries/{{ t.location }}.png" />
-          {{ t.location }}
+          <p>{{ t.location }}</p>
+          <div class="control-buttons">
+            <button class="btn btn-danger" (click)="onDelete(t.id)">
+              Delete
+            </button>
+          </div>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div *ngFor="let m of t.matches" class="item-list">
@@ -48,4 +53,3 @@
     </span>
   </div>
 </div>
-

@@ -1,6 +1,4 @@
-﻿using matchSchedule.Models;
-
-namespace matchSchedule.ViewModels
+﻿namespace matchSchedule.ViewModels
 {
     public class PlayerViewModel
     {

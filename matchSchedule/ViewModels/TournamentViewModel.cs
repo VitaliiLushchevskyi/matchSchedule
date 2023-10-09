@@ -1,5 +1,4 @@
-﻿using matchSchedule.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace matchSchedule.ViewModels
 {
@@ -13,6 +12,6 @@ namespace matchSchedule.ViewModels
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
         public ICollection<Guid> TeamIds { get; set; }
-       
+
     }
 }

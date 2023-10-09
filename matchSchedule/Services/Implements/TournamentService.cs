@@ -27,7 +27,7 @@ namespace matchSchedule.Services.Implements
         public async Task<Tournament> GetTournamentByIdAsync(Guid id)
         {
             return await _appDbContext.Tournaments
-                .Include(t => t.Teams)                
+                .Include(t => t.Teams)
                 .Include(t => t.Matches)
                 .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();

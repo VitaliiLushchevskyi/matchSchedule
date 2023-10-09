@@ -7,7 +7,7 @@ import { TournamentService } from '../services/tournament.service';
 import { RouterModule, Routes } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AddMatchComponent } from './add-match/add-match.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
@@ -25,6 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { NewTeamComponent } from './teams/new-team/new-team.component';
+import { MatListModule } from '@angular/material/list';
+import {MatPaginatorModule} from '@angular/material/paginator'
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -53,6 +55,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     MatExpansionModule,
     ReactiveFormsModule,
+    MatListModule,
+    FormsModule,
     NgSelectModule,
     NgxMatDatetimePickerModule,
     MatTableModule,
@@ -63,6 +67,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    MatPaginatorModule,
   ],
   providers: [TeamService, TournamentService],
 })
