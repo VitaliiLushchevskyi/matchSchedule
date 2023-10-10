@@ -10,13 +10,6 @@ img {
   position: relative;
 }
 
-.flag {
-  height: 16px;
-  width: 16px;
-  margin-right: 6px;
-  border-radius: 0%;
-}
-
 .teamLogo {
   width: 24px;
   height: 24px;
@@ -76,8 +69,14 @@ img {
 }
 .description p {
   width: 40%;
-  color: brown;
   margin-right: 10%;
-  position: relative;
-  text-align: center;
+  margin-top: 12px;
+  /* position: relative;
+  text-align: center; */
+}
+.flag {
+  height: 16px;
+  width: 16px;
+  margin-right: 6px;
+  border-radius: 0%;
 }

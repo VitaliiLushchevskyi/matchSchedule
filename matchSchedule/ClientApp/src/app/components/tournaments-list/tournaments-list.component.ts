@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { TournamentService } from 'src/app/services/tournament.service';
 import { Match } from 'src/app/shared/match';
 import { Tournament } from 'src/app/shared/tournament';
@@ -11,7 +12,10 @@ import { Tournament } from 'src/app/shared/tournament';
 export class TournamentsListComponent implements OnInit {
   tournaments: Tournament[] = [];
 
-  constructor(private service: TournamentService) {}
+  constructor(
+    private service: TournamentService,
+    public authService: AuthService
+  ) {}
   panelOpenState = false;
 
   ngOnInit(): void {

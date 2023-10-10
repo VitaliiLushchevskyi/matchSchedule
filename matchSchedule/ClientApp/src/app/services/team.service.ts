@@ -9,6 +9,19 @@ import { TeamViewModel } from '../shared/teamViewModel';
 })
 export class TeamService {
   private baseUrl: string = 'https://localhost:7145/api/Team/';
+  countries: string[] = [
+    'Ukraine',
+    'Brazil',
+    'England',
+    'France',
+    'Portugal',
+    'Italy',
+    'Poland',
+    'USA',
+    'Germany',
+    'Spain',
+    'Argentina',
+  ];
   constructor(private http: HttpClient) {}
 
   loadTeams(): Observable<Team[]> {

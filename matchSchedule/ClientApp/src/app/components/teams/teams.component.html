@@ -1,7 +1,22 @@
-<mat-form-field class="filter">
-  <mat-label>Search</mat-label>
-  <input matInput [formControl]="nameFilter" />
-</mat-form-field>
+<div class="filter">
+  <mat-form-field class="country-filter">
+    <mat-label>Select Country</mat-label>
+    <mat-select
+      [(ngModel)]="selectedCountry"
+      (selectionChange)="onCountryChange()"
+    >
+      <mat-option *ngFor="let country of countries" [value]="country">
+        {{ country }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="search">
+    <mat-label>Search</mat-label>
+    <input matInput [formControl]="nameFilter" />
+  </mat-form-field>
+</div>
+<a [routerLink]="['/teams/new']">New Team</a>
 <table mat-table [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <th class="header" mat-header-cell *matHeaderCellDef>Name</th>
@@ -31,4 +46,3 @@
   [pageSizeOptions]="[5, 10, 25, 100]"
   class="paginator"
 ></mat-paginator>
-

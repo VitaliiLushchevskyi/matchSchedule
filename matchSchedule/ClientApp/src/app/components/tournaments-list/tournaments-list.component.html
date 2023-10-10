@@ -13,7 +13,7 @@
         <mat-panel-description class="description">
           <img class="flag" src="/assets/img/countries/{{ t.location }}.png" />
           <p>{{ t.location }}</p>
-          <div class="control-buttons">
+          <div class="control-buttons" *ngIf="authService.isAdmin()">
             <button class="btn btn-danger" (click)="onDelete(t.id)">
               Delete
             </button>
@@ -28,11 +28,9 @@
               class="teamLogo"
             />{{ m.homeTeam.name }}
           </a>
-
           <p class="center-a">
             {{ m.matchDateTime | date : "MMM dd, yyyy 'at' hh:mm a" }}
           </p>
-
           <a [routerLink]="['/teams', m.awayTeam.id]" class="right-a">
             <img
               src="/assets/img/teamLogo/{{ m.awayTeam.logo }}"
@@ -48,8 +46,21 @@
   </mat-accordion>
   <div class="links">
     <span>
-      <a class="link" [routerLink]="['/matches/new']">New Match </a>
-      <a class="link" [routerLink]="['/tournaments/new']"> New Tournament</a>
+      <button
+        class="link"
+        [routerLink]="['/matches/new']"
+        *ngIf="authService.isAdmin()"
+      >
+        New Match
+      </button>
+      <button
+        mat-button
+        class="link"
+        [routerLink]="['/tournaments/new']"
+        *ngIf="authService.isLoggedIn()"
+      >
+        New Tournament
+      </button>
     </span>
   </div>
 </div>

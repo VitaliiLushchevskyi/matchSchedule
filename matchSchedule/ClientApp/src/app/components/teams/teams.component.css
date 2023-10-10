@@ -30,3 +30,11 @@ table th,
 td {
   text-align: center;
 }
+
+.filter .country-filter {
+  margin-right: 1%;
+  width: 18%;
+}
+.filter .search {
+  width: 81%;
+}

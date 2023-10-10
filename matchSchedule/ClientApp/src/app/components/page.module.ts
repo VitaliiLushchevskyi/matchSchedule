@@ -26,7 +26,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { NewTeamComponent } from './teams/new-team/new-team.component';
 import { MatListModule } from '@angular/material/list';
-import {MatPaginatorModule} from '@angular/material/paginator'
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { AuthGuard } from '../guards/auth.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -34,8 +36,16 @@ const routes: Routes = [
   { path: 'teams/:id', component: TeamPageComponent },
   { path: 'players/:id', component: PlayerInfoComponent },
   { path: 'tournaments', component: TournamentsListComponent },
-  { path: 'tournaments/new', component: NewTournamentComponent },
-  { path: 'matches/new', component: AddMatchComponent },
+  {
+    path: 'tournaments/new',
+    component: NewTournamentComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'matches/new',
+    component: AddMatchComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

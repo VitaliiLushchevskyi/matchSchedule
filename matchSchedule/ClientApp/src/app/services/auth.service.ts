@@ -14,8 +14,6 @@ export class AuthService {
     this.userPayload = this.decodedToken();
   }
 
- 
-
   signUp(userObj: any) {
     return this.http.post<any>(`${this.baseUrl}register`, userObj);
   }
@@ -27,7 +25,6 @@ export class AuthService {
 
   login(loginObj: any) {
     return this.http.post<any>(`${this.baseUrl}authenticate`, loginObj);
-    
   }
 
   storeToken(token: string) {
@@ -54,5 +51,8 @@ export class AuthService {
 
   getRoleFromToken() {
     if (this.userPayload) return this.userPayload.role;
+  }
+  isAdmin(): boolean {
+    return !!(this.getRoleFromToken()?.toLowerCase() === 'admin');
   }
 }
