@@ -12,7 +12,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
-
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { TeamPlayersListComponent } from './team-page/team-players-list/team-players-list.component';
@@ -29,6 +29,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGuard } from '../guards/auth.guard';
 import { AdminGuard } from '../guards/admin.guard';
+import { AddPlayerDialogComponent } from './team-page/add-player-dialog/add-player-dialog.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
     CalculateAgePipe,
     NewTournamentComponent,
     NewTeamComponent,
+    AddPlayerDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -78,6 +80,7 @@ const routes: Routes = [
     MatNativeDateModule,
     MatInputModule,
     MatPaginatorModule,
+    MatDialogModule,
   ],
   providers: [TeamService, TournamentService],
 })

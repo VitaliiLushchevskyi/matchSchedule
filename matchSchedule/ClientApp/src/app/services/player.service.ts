@@ -4,7 +4,7 @@ import { Player } from '../shared/player';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlayerService {
   private baseUrl: string = 'https://localhost:7145/api/Player/';
@@ -16,5 +16,9 @@ export class PlayerService {
 
   loadPlayerById(id: string): Observable<Player> {
     return this.http.get<Player>(`${this.baseUrl}` + id);
+  }
+
+  loadFreePlayers(): Observable<Player[]> {
+    return this.http.get<Player[]>(`${this.baseUrl}players/free`);
   }
 }

@@ -57,7 +57,7 @@
         mat-button
         class="link"
         [routerLink]="['/tournaments/new']"
-        *ngIf="authService.isLoggedIn()"
+        *ngIf="authService.isAdmin()"
       >
         New Tournament
       </button>

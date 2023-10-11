@@ -20,6 +20,6 @@ export class TournamentService {
   }
 
   deleteTournament(id: string) {
-    return this.http.delete(`${this.baseUrl}/` + id);
+    return this.http.delete<any>(`${this.baseUrl}/` + id);
   }
 }

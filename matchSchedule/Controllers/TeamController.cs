@@ -2,7 +2,9 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace matchSchedule.Controllers
 {
@@ -49,6 +51,8 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get team!");
             }
         }
+
+        //[Authorize(Roles = "admin")]
         [HttpPost("new")]
         public async Task<IActionResult> Post([FromBody] TeamViewModel team)
         {
@@ -76,6 +80,7 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the team!");
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("{teamId:Guid}/addPlayer/{playerId:Guid}")]
         public async Task<IActionResult> Post(Guid teamId, Guid playerId)
@@ -91,6 +96,7 @@ namespace matchSchedule.Controllers
             }
         }
 
+        //[Authorize(Roles = "admin")]
         [HttpPost]
         [Route("{teamId:Guid}/addListOfPlayers")]
         public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)

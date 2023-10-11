@@ -2,6 +2,7 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace matchSchedule.Controllers
@@ -48,6 +49,8 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get tournament!");
             }
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("new")]
         public async Task<IActionResult> Post([FromBody] TournamentViewModel model)
         {
@@ -75,6 +78,7 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the tournament!");
         }
 
+        [Authorize(Roles ="admin")]
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -82,8 +86,7 @@ namespace matchSchedule.Controllers
             {
                 if (ModelState.IsValid)
                 {                 
-                    var tournament = await _service.GetTournamentByIdAsync(id);
-                    
+                    var tournament = await _service.GetTournamentByIdAsync(id);   
                     if (tournament == null)
                         return NotFound($"The tournament with id: {id} wasn`t found");
                     _service.RemoveEntity(tournament);
@@ -97,8 +100,7 @@ namespace matchSchedule.Controllers
             {
                 _logger.LogError(ex.Message);
             }
-
-            return BadRequest("Failed to delete the tournament!");
+            return BadRequest(new { Message = "Failed to delete the tournament!" });
         }
 
     }

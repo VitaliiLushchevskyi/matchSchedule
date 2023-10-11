@@ -2,7 +2,9 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace matchSchedule.Controllers
 {
@@ -49,6 +51,8 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get match!");
             }
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("createMatch")]
         public IActionResult Post([FromBody] MatchViewModel model)
         {

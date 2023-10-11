@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <mat-form-field>
+    <mat-label>Select players</mat-label>
+    <mat-select multiple [(ngModel)]="selectedPlayersIds">
+      <mat-option *ngFor="let player of players" [value]="player.playerId"
+        >{{ player.firstName }} {{ player.lastName }}</mat-option
+      >
+    </mat-select> </mat-form-field
+  ><br />
+  <button mat-button (click)="onSubmit()">Add players</button>
+</div>

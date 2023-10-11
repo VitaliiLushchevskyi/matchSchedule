@@ -50,7 +50,11 @@ export class AuthService {
   }
 
   getRoleFromToken() {
-    if (this.userPayload) return this.userPayload.role;
+    if (this.isLoggedIn()) {
+      const decodedToken = this.decodedToken();
+      return decodedToken.role;
+    }
+    // if (this.userPayload) return this.userPayload.role;
   }
   isAdmin(): boolean {
     return !!(this.getRoleFromToken()?.toLowerCase() === 'admin');

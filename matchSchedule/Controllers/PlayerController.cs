@@ -2,7 +2,9 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace matchSchedule.Controllers
 {
@@ -36,6 +38,20 @@ namespace matchSchedule.Controllers
             }
         }
 
+        [HttpGet("players/free")]
+        public async Task<IActionResult> GetFreePlayers()
+        {
+            try
+            {
+                return Ok(await _playerService.GetFreePlayersAsync());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to get players!");
+            }
+        }
+
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -49,6 +65,8 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed to get player!");
             }
         }
+
+        //[Authorize(Roles = "admin")]
         [HttpPost]
         [Route("createPlayer")]
         public IActionResult Post([FromBody] PlayerViewModel player)

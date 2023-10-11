@@ -47,5 +47,10 @@ namespace matchSchedule.Services.Implements
         {
             return _appDbContext.SaveChanges() > 0;
         }
+
+        public async Task<List<Player>> GetFreePlayersAsync()
+        {
+           return await _appDbContext.Players.Where(p=>p.TeamId == null).ToListAsync();
+        }
     }
 }
