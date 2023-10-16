@@ -34,6 +34,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../interceptors/token.interceptor';
+import { AddMatchToTheTournamentDialogComponent } from './tournaments-list/add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -44,7 +45,7 @@ const routes: Routes = [
   {
     path: 'tournaments/new',
     component: NewTournamentComponent,
-    // canActivate: [AdminGuard],
+    canActivate: [AdminGuard],
   },
   {
     path: 'matches/new',
@@ -65,6 +66,7 @@ const routes: Routes = [
     NewTournamentComponent,
     NewTeamComponent,
     AddPlayerDialogComponent,
+    AddMatchToTheTournamentDialogComponent
   ],
   imports: [
     CommonModule,

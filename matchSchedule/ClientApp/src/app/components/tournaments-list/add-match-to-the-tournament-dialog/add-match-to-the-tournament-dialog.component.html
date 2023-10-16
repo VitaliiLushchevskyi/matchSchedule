@@ -1,0 +1,41 @@
+<br />
+<h1 class="title">{{ tournament.name }}</h1>
+<form [formGroup]="matchForm" class="form">
+  <mat-form-field>
+    <mat-label>Select Home Team:</mat-label>
+    <mat-select
+      formControlName="homeTeamId"
+      (change)="onTeamSelected('homeTeam', $event)"
+    >
+      <mat-option *ngFor="let team of tournament.teams" [value]="team.id">
+        {{ team.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select Away Team:</mat-label>
+    <mat-select
+      formControlName="awayTeamId"
+      (change)="onTeamSelected('awayTeam', $event)"
+    >
+      <mat-option *ngFor="let team of tournament.teams" [value]="team.id">
+        {{ team.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field
+    ><mat-label>Referee:</mat-label> <input matInput formControlName="referee"
+  /></mat-form-field>
+
+  <mat-form-field
+    ><mat-label>Date:</mat-label>
+    <input type="datetime-local" matInput formControlName="matchDateTime"
+  /></mat-form-field>
+
+  <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+    Add Match
+  </button>
+</form>
+<br />

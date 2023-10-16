@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgToastService } from 'ng-angular-popup';
 import { AuthService } from 'src/app/services/auth.service';
 import { TournamentService } from 'src/app/services/tournament.service';
 import { Match } from 'src/app/shared/match';
 import { Tournament } from 'src/app/shared/tournament';
+import { AddMatchToTheTournamentDialogComponent } from './add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
 
 @Component({
   selector: 'app-tournaments-list',
@@ -12,20 +14,35 @@ import { Tournament } from 'src/app/shared/tournament';
 })
 export class TournamentsListComponent implements OnInit {
   tournaments: Tournament[] = [];
+  tournament: Tournament;
 
   constructor(
     private service: TournamentService,
     public authService: AuthService,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private dialog: MatDialog
   ) {}
   panelOpenState = false;
 
   ngOnInit(): void {
     this.service.loadTournaments().subscribe((data) => {
       this.tournaments = data;
-      
     });
   }
+
+  openDialog(id: string): void {
+    this.service.loadTournamentById(id).subscribe((data) => {
+      this.tournament = data;
+      const dialogRef = this.dialog.open(
+        AddMatchToTheTournamentDialogComponent,
+        {
+          width: '70%',
+          data: this.tournament,
+        }
+      );
+    });
+  }
+
   onDelete(id: string) {
     this.service.deleteTournament(id).subscribe({
       next: (res) => {

@@ -16,6 +16,10 @@ export class TournamentService {
     return this.http.get<Tournament[]>(`${this.baseUrl}/tournaments`);
   }
 
+  loadTournamentById(id: string): Observable<Tournament> {
+    return this.http.get<Tournament>(`${this.baseUrl}/` + id);
+  }
+
   createTournament(model: TournamentViewModel): Observable<any> {
     const token = this.authService.getToken(); // Отримайте токен з сервісу авторизації
     const headers = new HttpHeaders({

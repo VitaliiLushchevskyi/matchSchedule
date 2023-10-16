@@ -16,6 +16,9 @@ img {
   border-radius: 90%;
   object-fit: scale-down;
 }
+.item-list:first-child {
+  margin-top: 23px;
+}
 
 .item-list {
   display: flex;
@@ -64,7 +67,7 @@ img {
 
 .control-buttons button {
   position: relative;
-  display: block;
+  display: inline-block;
   right: 0%;
   object-fit: scale-down;
   margin-top: 35px;
