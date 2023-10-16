@@ -22,11 +22,11 @@ export class NewTeamComponent implements OnInit {
     private playerService: PlayerService
   ) {
     this.teamForm = this.fb.group({
-      id: [''],
-      name: [''],
-      country: [''],
-      yearFounded: [0],
-      logo: [''],
+      id: [null],
+      name: [null],
+      country: [null],
+      yearFounded: [null],
+      logo: [null],
       playerIds: fb.control([]),
       // coachesIds: fb.control([]),
     });

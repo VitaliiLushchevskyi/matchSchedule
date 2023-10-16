@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgToastService } from 'ng-angular-popup';
+import { AuthService } from 'src/app/services/auth.service';
 import { TeamService } from 'src/app/services/team.service';
 import { Team } from 'src/app/shared/team';
 
@@ -13,34 +15,43 @@ import { Team } from 'src/app/shared/team';
 export class TeamsComponent implements OnInit {
   nameFilter = new FormControl('');
   dataSource = new MatTableDataSource();
-  columnsToDisplay = ['logo', 'name', 'country', 'year'];
+  columnsToDisplay = ['logo', 'name', 'country', 'year', 'delete'];
   filterValues = {
     name: '',
     country: '',
   };
+  teams: Team[] = [];
   countries: string[];
   selectedCountry: string;
-  countryByDefault: string = 'All';
+  countryByDefault: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private teamService: TeamService) {}
+  constructor(
+    private teamService: TeamService,
+    public authService: AuthService,
+    private toast: NgToastService
+  ) {}
 
   ngOnInit(): void {
+    this.countryByDefault = 'All';
     this.nameFilter.valueChanges.subscribe((name) => {
       this.filterValues.name = name ? name.toLowerCase() : '';
-
       this.dataSource.filter = JSON.stringify(this.filterValues);
     });
 
     this.teamService.loadTeams().subscribe((_teams) => {
-      this.dataSource.data = _teams;
+      this.teams = _teams;
+      this.dataSource.data = this.teams;
       this.dataSource.filterPredicate = this.createFilter();
       this.dataSource.paginator = this.paginator;
     });
     this.countries = this.teamService.countries;
-    this.countries.push(this.countryByDefault);
+    if (!this.countries.includes(this.countryByDefault)) {
+      this.countries.push(this.countryByDefault);
+      this.countries.sort();
+    }
     this.countries.sort();
-    this.selectedCountry = this.countryByDefault;
+    // this.selectedCountry = this.countryByDefault;
   }
 
   createFilter(): (data: any, filter: string) => boolean {
@@ -67,5 +78,27 @@ export class TeamsComponent implements OnInit {
   onCountryChange() {
     this.filterValues.country = this.selectedCountry.toLowerCase();
     this.dataSource.filter = JSON.stringify(this.filterValues);
+  }
+
+  onDelete(id: string) {
+    this.teamService.deleteTeam(id).subscribe({
+      next: (res) => {
+        this.teams = this.teams.filter((team: Team) => team.id !== id);
+        this.dataSource.data = this.teams;
+
+        this.toast.success({
+          detail: 'SUCCESS',
+          summary: res.message,
+          duration: 5000,
+        });
+      },
+      error: (err) => {
+        this.toast.error({
+          detail: 'ERROR',
+          summary: err.error.message,
+          duration: 5000,
+        });
+      },
+    });
   }
 }

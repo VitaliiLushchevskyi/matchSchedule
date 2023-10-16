@@ -21,23 +21,57 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnStr"));
 });
-
-builder.Services.AddAuthentication(x =>
+builder.Services.AddCors(options =>
 {
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("someverysecretstring...")),
-        ValidateAudience = false,
-        ValidateIssuer = false
-    };
+    options.AddPolicy(
+        name: "AllowOrigin",
+        builder => {
+            builder.WithOrigins("https://localhost:44447")
+                       .AllowAnyHeader()
+                    .AllowAnyMethod();
+                    
+        });
 });
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidIssuer = builder.Configuration["Tokens:Issuer"],
+            ValidAudience = builder.Configuration["Tokens:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"])
+            ),
+            ClockSkew = TimeSpan.Zero,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+          
+        };
+    });
+       
+
+
+
+//builder.Services.AddAuthentication()
+//    .AddCookie()
+//    .AddJwtBearer(cfg =>
+//    {
+//        cfg.TokenValidationParameters = new TokenValidationParameters()
+//        {
+//            ValidIssuer = builder.Configuration["Tokens:Issuer"],
+//            ValidAudience = builder.Configuration["Tokens:Audience"],
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"])),
+//            ValidateIssuer = true,
+//            ValidateAudience = true,
+//            ValidateLifetime = false,
+//            ValidateIssuerSigningKey = true,
+
+//        };
+//    });
 
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -53,16 +87,16 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
-builder.Services.AddCors(option =>
-{
-    option.AddPolicy("MyPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
+//builder.Services.AddCors(option =>
+//{
+//    option.AddPolicy("MyPolicy", builder =>
+//    {
+//        builder.AllowAnyOrigin()
+//        .AllowAnyMethod()
+//        .AllowAnyHeader();
 
-    });
-});
+//    });
+//});
 
 var app = builder.Build();
 
@@ -76,12 +110,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("MyPolicy");
+app.UseStaticFiles();
+app.UseRouting();
+
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseStaticFiles();
-app.UseRouting();
+app.UseCors("AllowOrigin");
 
 app.MapControllerRoute(
     name: "default",

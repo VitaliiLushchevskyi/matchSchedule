@@ -13,7 +13,11 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService,private toast: NgToastService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private toast: NgToastService,
+    private router: Router
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
@@ -23,17 +27,24 @@ export class TokenInterceptor implements HttpInterceptor {
 
     if (myToken) {
       request = request.clone({
-        setHeaders: { Authorization: `Bearer ${myToken}` },
+        setHeaders: {
+          Authorization: `Bearer ${myToken}`,
+          // 'Content-Type': 'application/json',
+        },
       });
     }
     return next.handle(request).pipe(
-      catchError((err:any)=>{
-        if(err instanceof HttpErrorResponse){
-          if(err.status === 401){
-            this.toast.warning({detail:"Warning!", summary:"Token is expired, Please login again!"})
+      catchError((err: any) => {
+        console.log(err);
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.toast.warning({
+              detail: 'Warning!',
+              summary: 'Token is expired, Please login again!',
+            });
           }
         }
-        return throwError(()=>new Error("Unknown error!"))
+        return throwError(() => new Error('Unknown error!'));
       })
     );
   }

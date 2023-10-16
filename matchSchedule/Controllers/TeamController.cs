@@ -2,6 +2,7 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -52,7 +53,7 @@ namespace matchSchedule.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("new")]
         public async Task<IActionResult> Post([FromBody] TeamViewModel team)
         {
@@ -80,7 +81,7 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the team!");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost]
         [Route("{teamId:Guid}/addPlayer/{playerId:Guid}")]
         public async Task<IActionResult> Post(Guid teamId, Guid playerId)
@@ -96,7 +97,7 @@ namespace matchSchedule.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost]
         [Route("{teamId:Guid}/addListOfPlayers")]
         public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)
@@ -108,5 +109,31 @@ namespace matchSchedule.Controllers
                 return BadRequest("Failed!");
 
         }
-    }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var tournament = await _teamService.GetTeamByIdAsync(id);
+                    if (tournament == null)
+                        return NotFound($"The team with id: {id} wasn`t found");
+                    _teamService.RemoveEntity(tournament);
+                    if (_teamService.SaveAll())
+                        return NoContent();
+                }
+                else
+                    return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest(new { Message = "Failed to delete the team!" });
+        }
+
+    
+}
 }

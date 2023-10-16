@@ -2,6 +2,7 @@
 using matchSchedule.Helpers;
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,10 +19,12 @@ namespace matchSchedule.Controllers
     {
         private readonly AppDbContext _dbContext;
         private readonly IAuthService _authService;
-        public UserController(AppDbContext dbContext, IAuthService authService)
+        private readonly IConfiguration _config;
+        public UserController(AppDbContext dbContext, IAuthService authService, IConfiguration config)
         {
             _dbContext = dbContext;
             _authService = authService;
+            _config = config;
         }
 
         [HttpPost("authenticate")]
@@ -79,18 +82,22 @@ namespace matchSchedule.Controllers
 
         private string CreateJwt(User user)
         {
+
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("someverysecretstring...");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToLower()),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
             });
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = _config["Tokens:Issuer"],
+                Audience = _config["Tokens:Audience"],
                 Subject = identity,
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = credentials,

@@ -66,6 +66,8 @@ img {
   position: relative;
   display: block;
   right: 0%;
+  object-fit: scale-down;
+  margin-top: 35px;
 }
 .description p {
   width: 40%;
@@ -79,4 +81,7 @@ img {
   width: 16px;
   margin-right: 6px;
   border-radius: 0%;
+}
+mat-expansion-panel {
+  margin-bottom: 15px;
 }

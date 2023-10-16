@@ -2,6 +2,7 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -52,7 +53,8 @@ namespace matchSchedule.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("createMatch")]
         public IActionResult Post([FromBody] MatchViewModel model)
         {

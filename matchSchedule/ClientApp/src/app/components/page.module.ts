@@ -30,6 +30,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGuard } from '../guards/auth.guard';
 import { AdminGuard } from '../guards/admin.guard';
 import { AddPlayerDialogComponent } from './team-page/add-player-dialog/add-player-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -40,12 +44,12 @@ const routes: Routes = [
   {
     path: 'tournaments/new',
     component: NewTournamentComponent,
-    canActivate: [AdminGuard],
+    // canActivate: [AdminGuard],
   },
   {
     path: 'matches/new',
     component: AddMatchComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AdminGuard],
   },
 ];
 
@@ -80,7 +84,9 @@ const routes: Routes = [
     MatNativeDateModule,
     MatInputModule,
     MatPaginatorModule,
+    MatButtonModule,
     MatDialogModule,
+    MatIconModule,
   ],
   providers: [TeamService, TournamentService],
 })

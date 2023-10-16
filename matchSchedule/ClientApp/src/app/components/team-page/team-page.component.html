@@ -6,5 +6,5 @@
 <br />
 
 <p class="title">Players of {{ team.name }}</p>
-<a (click)="openDialog()">Add player</a>
+<button mat-raised-button (click)="openDialog()" *ngIf="authService.isAdmin()">Add player</button>
 <app-team-players-list></app-team-players-list>

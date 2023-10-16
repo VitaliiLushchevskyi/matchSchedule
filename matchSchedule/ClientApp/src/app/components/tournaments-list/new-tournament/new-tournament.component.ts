@@ -22,12 +22,12 @@ export class NewTournamentComponent implements OnInit {
     private teamService: TeamService
   ) {
     this.tournamentForm = this.fb.group({
-      id: [''],
-      name: [''],
-      location: [''],
-      startDate: new Date(''),
-      endDate: new Date(''),
-      description: [''],
+      id: [null],
+      name: [null],
+      location: [null],
+      startDate: new Date(),
+      endDate: new Date(),
+      description: [null],
       teamIds: fb.control([]),
     });
   }
@@ -44,7 +44,7 @@ export class NewTournamentComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.tournamentForm.value)
+    console.log(this.tournamentForm.value);
     this.tournamentService
       .createTournament(this.tournamentForm.value)
       .subscribe({

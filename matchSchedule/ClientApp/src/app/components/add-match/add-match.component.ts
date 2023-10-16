@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgToastService } from 'ng-angular-popup';
 import { MatchService } from 'src/app/services/match.service';
 import { TeamService } from 'src/app/services/team.service';
 import { TournamentService } from 'src/app/services/tournament.service';
@@ -18,6 +19,7 @@ export class AddMatchComponent {
 
   constructor(
     private fb: FormBuilder,
+    private toast: NgToastService,
     private matchService: MatchService,
     private tournamentsService: TournamentService,
     private teamService: TeamService
@@ -56,9 +58,7 @@ export class AddMatchComponent {
 
   onTeamSelected(teamType: string, event: Event) {
     const selectedTeamId = (event.target as HTMLSelectElement).value;
-    const selectedTeam = this.teams.find(
-      (team) => team.id === selectedTeamId
-    );
+    const selectedTeam = this.teams.find((team) => team.id === selectedTeamId);
     if (selectedTeam) {
       this.matchForm.patchValue({
         [teamType]: selectedTeam, // встановлюємо homeTeam або awayTeam в залежності від teamType
@@ -68,18 +68,22 @@ export class AddMatchComponent {
   }
 
   onSubmit() {
-    // if (this.matchForm.valid) {
-    this.matchService.addMatch(this.matchForm.value).subscribe(
-      (data) => {
-        console.log('Match added successfully!', data);
-        // Очистити форму після успішного додавання
+    this.matchService.addMatch(this.matchForm.value).subscribe({
+      next: (res) => {
+        this.toast.success({
+          detail: 'SUCCESS',
+          // summary: res.message,
+          duration: 5000,
+        });
         this.matchForm.reset();
       },
-      (error) => {
-        console.error('Error adding match: ', error);
-        console.log(this.matchForm.value);
-      }
-    );
-    // }
+      error: (err) => {
+        this.toast.error({
+          detail: 'ERROR',
+          summary: err.error.message,
+          duration: 5000,
+        });
+      },
+    });
   }
 }

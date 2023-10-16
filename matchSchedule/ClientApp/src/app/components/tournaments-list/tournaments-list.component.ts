@@ -23,6 +23,7 @@ export class TournamentsListComponent implements OnInit {
   ngOnInit(): void {
     this.service.loadTournaments().subscribe((data) => {
       this.tournaments = data;
+      
     });
   }
   onDelete(id: string) {

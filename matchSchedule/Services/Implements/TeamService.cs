@@ -97,5 +97,6 @@ namespace matchSchedule.Services.Implements
         {
             return await _appDbContext.Players.Where(player => ids.Contains(player.PlayerId)).ToListAsync();
         }
-    }
+
+     }
 }

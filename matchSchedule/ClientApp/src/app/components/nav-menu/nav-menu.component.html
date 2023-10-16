@@ -27,42 +27,41 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link" [routerLink]="['/']">Home</a>
           </li>
           <li
             class="nav-item"
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/tournaments']"
-              >Tournaments</a
-            >
+            <a class="nav-link" [routerLink]="['/tournaments']">Tournaments</a>
           </li>
+          <li
+            class="nav-item"
+            [routerLinkActive]="['link-active']"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <a class="nav-link" [routerLink]="['/teams']">Teams</a>
+          </li>
+
           <li
             class="nav-item"
             *ngIf="isLoggedIn(); else loginTemplate"
             [routerLinkActive]="['link-active']"
           >
-            <a
-              class="nav-link text-dark"
-              [routerLink]="['/']"
-              (click)="logout()"
+            <a class="nav-link" [routerLink]="['/']" (click)="logout()"
               >Logout</a
             >
           </li>
 
           <ng-template #loginTemplate>
             <li class="nav-item" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['/login']"
-                >Sign In</a
-              >
+              <a class="nav-link" [routerLink]="['/login']">Sign In</a>
             </li>
             <li class="nav-item" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['/signup']"
-                >Sign Up</a
-              >
-            </li></ng-template
-          >
+              <a class="nav-link" [routerLink]="['/signup']">Sign Up</a>
+            </li>
+          </ng-template>
         </ul>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { Team } from 'src/app/shared/team';
 import { AddPlayerDialogComponent } from './add-player-dialog/add-player-dialog.component';
 import { PlayerService } from 'src/app/services/player.service';
 import { Player } from 'src/app/shared/player';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-team-page',
@@ -21,7 +22,8 @@ export class TeamPageComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private service: TeamService,
     private dialog: MatDialog,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

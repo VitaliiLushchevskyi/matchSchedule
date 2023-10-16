@@ -36,11 +36,15 @@ export class TeamService {
     return this.http.post<any>(`${this.baseUrl}new`, model);
   }
 
-  addPlayerToTeam(teamId: string, playerId: string) {
-    return this.http.post<any>(
-      `${this.baseUrl}${teamId}/addPlayer/${playerId}`,
-      null
-    );
+  // addPlayerToTeam(teamId: string, playerId: string) {
+  //   return this.http.post<any>(
+  //     `${this.baseUrl}${teamId}/addPlayer/${playerId}`,
+  //     null
+  //   );
+  // }
+
+  deleteTeam(id: string) {
+    return this.http.delete<any>(`${this.baseUrl}` + id);
   }
 
   addListOfPlayersToTeam(teamId: string, playersIds: string[]) {

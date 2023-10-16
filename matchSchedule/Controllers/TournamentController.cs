@@ -2,6 +2,7 @@
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,8 +51,9 @@ namespace matchSchedule.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+  
         [HttpPost("new")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> Post([FromBody] TournamentViewModel model)
         {
             try
@@ -78,7 +80,7 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the tournament!");
         }
 
-        [Authorize(Roles ="admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {

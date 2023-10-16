@@ -78,3 +78,10 @@ img {
 .title {
   font-size: 40px;
 }
+button {
+  margin-left: 10px;
+  margin-bottom: 16px;
+}
+mat-form-field {
+  margin-right: 4px;
+}
