@@ -16,7 +16,14 @@
     <input matInput [formControl]="nameFilter" />
   </mat-form-field>
 </div>
-<a [routerLink]="['/teams/new']">New Team</a>
+<button
+  mat-raised-button
+  color="primary"
+  [routerLink]="['/teams/new']"
+  *ngIf="authService.isAdmin()"
+>
+  New Team
+</button>
 <table mat-table [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <th class="header" mat-header-cell *matHeaderCellDef>Name</th>
@@ -40,7 +47,7 @@
   </ng-container>
   <ng-container matColumnDef="delete">
     <th class="header" mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let team">  
+    <td mat-cell *matCellDef="let team">
       <div class="control-buttons" *ngIf="authService.isAdmin()">
         <button mat-mini-fab color="warn" (click)="onDelete(team.id)">
           <mat-icon>delete</mat-icon>

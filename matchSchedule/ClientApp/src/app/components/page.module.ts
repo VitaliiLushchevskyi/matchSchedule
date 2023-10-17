@@ -6,7 +6,7 @@ import { TournamentsListComponent } from './tournaments-list/tournaments-list.co
 import { TournamentService } from '../services/tournament.service';
 import { RouterModule, Routes } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { AddMatchComponent } from './add-match/add-match.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TeamPageComponent } from './team-page/team-page.component';
@@ -35,10 +35,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../interceptors/token.interceptor';
 import { AddMatchToTheTournamentDialogComponent } from './tournaments-list/add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
+import { EditTournamentComponent } from './tournaments-list/edit-tournament-dialog/edit-tournament.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
-  { path: 'teams/new', component: NewTeamComponent },
+  { path: 'teams/new', component: NewTeamComponent , canActivate: [AdminGuard]},
   { path: 'teams/:id', component: TeamPageComponent },
   { path: 'players/:id', component: PlayerInfoComponent },
   { path: 'tournaments', component: TournamentsListComponent },
@@ -47,18 +48,13 @@ const routes: Routes = [
     component: NewTournamentComponent,
     canActivate: [AdminGuard],
   },
-  {
-    path: 'matches/new',
-    component: AddMatchComponent,
-    canActivate: [AdminGuard],
-  },
 ];
 
 @NgModule({
   declarations: [
     TeamsComponent,
     TournamentsListComponent,
-    AddMatchComponent,
+    EditTournamentComponent,
     TeamPageComponent,
     PlayerInfoComponent,
     TeamPlayersListComponent,
@@ -66,7 +62,7 @@ const routes: Routes = [
     NewTournamentComponent,
     NewTeamComponent,
     AddPlayerDialogComponent,
-    AddMatchToTheTournamentDialogComponent
+    AddMatchToTheTournamentDialogComponent,
   ],
   imports: [
     CommonModule,

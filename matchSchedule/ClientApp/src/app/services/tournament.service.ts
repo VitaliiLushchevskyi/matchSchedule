@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Tournament } from '../shared/tournament';
 import { TournamentViewModel } from '../shared/tournamentViewModel';
 import { AuthService } from './auth.service';
+import { TournamentEditDTO } from '../shared/tournamentEditDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,9 @@ export class TournamentService {
 
   deleteTournament(id: string) {
     return this.http.delete<any>(`${this.baseUrl}/` + id);
+  }
+
+  editTournament(id: string, model: TournamentEditDTO) {
+    return this.http.put(`${this.baseUrl}/${id}/edit`, model);
   }
 }

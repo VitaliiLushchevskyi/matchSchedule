@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Controllers
 {
@@ -103,6 +105,30 @@ namespace matchSchedule.Controllers
                 _logger.LogError(ex.Message);
             }
             return BadRequest(new { Message = "Failed to delete the tournament!" });
+        }
+
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPut("{id:Guid}/edit")]
+        public async Task<ActionResult> Put(Guid id, [FromBody]TournamentEditDto model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                   var editedTournament = await _service.EditTournamentByIdAsync(id, model);
+                   if(editedTournament == null)
+                        return BadRequest(NotFound());
+                    return (Ok(editedTournament));
+                }
+                else
+                    return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return BadRequest("Failed to post the match!");
         }
 
     }

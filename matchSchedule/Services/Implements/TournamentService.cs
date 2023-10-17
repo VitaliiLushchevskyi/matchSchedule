@@ -1,5 +1,6 @@
 ﻿using matchSchedule.Context;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,6 +57,25 @@ namespace matchSchedule.Services.Implements
         public async Task<List<Team>> GetTeamsByIdAsync(ICollection<Guid> guids)
         {
             return await _appDbContext.Teams.Where(teams => guids.Contains(teams.Id)).ToListAsync();
+        }
+
+        public async Task<Tournament> EditTournamentByIdAsync(Guid id, TournamentEditDto model)
+        {
+            var tournament = await GetTournamentByIdAsync(id);
+            if(tournament == null)
+                return null;
+            tournament.Name = model.Name;
+            tournament.Location = model.Location;
+            tournament.StartDate = model.StartDate;
+            tournament.EndDate = model.EndDate;
+            tournament.Description = model.Description;
+            _appDbContext.Entry(tournament).State = EntityState.Modified;
+            if (await SaveAllAsync())
+            {
+                return tournament;
+            }
+            else { return null; }
+            
         }
     }
 }

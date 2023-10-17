@@ -14,11 +14,14 @@
           <img class="flag" src="/assets/img/countries/{{ t.location }}.png" />
           <p>{{ t.location }}</p>
           <div class="control-buttons" *ngIf="authService.isAdmin()">
+            <button mat-mini-fab color="primary" (click)="openNewMatchDialog(t.id)">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" (click)="openEditDialog(t.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
             <button mat-mini-fab color="warn" (click)="onDelete(t.id)">
               <mat-icon>delete</mat-icon>
-            </button>
-            <button mat-mini-fab color="" (click)="openDialog(t.id)">
-              <mat-icon>add</mat-icon>
             </button>
           </div>
         </mat-panel-description>
@@ -51,15 +54,7 @@
     <span>
       <button
         mat-raised-button
-        class="link"
-        [routerLink]="['/matches/new']"
-        *ngIf="authService.isAdmin()"
-      >
-        New Match
-      </button>
-      <button
-        mat-raised-button
-        class="link"
+        color="primary"
         [routerLink]="['/tournaments/new']"
         *ngIf="authService.isAdmin()"
       >

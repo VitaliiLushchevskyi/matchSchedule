@@ -1,4 +1,5 @@
 ﻿using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 
 namespace matchSchedule.Services.Interfaces
 {
@@ -11,5 +12,6 @@ namespace matchSchedule.Services.Interfaces
         Task<bool> SaveAllAsync();
         bool SaveAll();
         void RemoveEntity(object model);
+        Task<Tournament> EditTournamentByIdAsync(Guid id, TournamentEditDto model);
     }
 }

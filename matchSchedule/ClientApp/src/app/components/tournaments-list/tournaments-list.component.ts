@@ -6,6 +6,7 @@ import { TournamentService } from 'src/app/services/tournament.service';
 import { Match } from 'src/app/shared/match';
 import { Tournament } from 'src/app/shared/tournament';
 import { AddMatchToTheTournamentDialogComponent } from './add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
+import { EditTournamentComponent } from './edit-tournament-dialog/edit-tournament.component';
 
 @Component({
   selector: 'app-tournaments-list',
@@ -30,7 +31,23 @@ export class TournamentsListComponent implements OnInit {
     });
   }
 
-  openDialog(id: string): void {
+  openEditDialog(id: string): void {
+    this.service.loadTournamentById(id).subscribe((data) => {
+      this.tournament = data;
+      const dialogRef = this.dialog.open(EditTournamentComponent, {
+        width: '80%',
+        data: this.tournament,
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        this.service.loadTournaments().subscribe((data) => {
+          this.tournaments = data;
+        });
+      });
+    });
+  }
+
+  openNewMatchDialog(id: string): void {
     this.service.loadTournamentById(id).subscribe((data) => {
       this.tournament = data;
       const dialogRef = this.dialog.open(

@@ -1,0 +1,44 @@
+<br />
+<form [formGroup]="tournamentForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Name of the tournament</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Location</mat-label>
+    <input matInput formControlName="location" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Start date</mat-label>
+    <input
+      matInput
+      formControlName="startDate"
+      [matDatepicker]="startDatePicker"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      (click)="startDatePicker.open()"
+      [for]="startDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>End date</mat-label>
+    <input matInput formControlName="endDate" [matDatepicker]="endDatePicker" />
+    <mat-datepicker-toggle
+      matSuffix
+      (click)="endDatePicker.open()"
+      [for]="endDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" />
+  </mat-form-field>
+  <br />
+  <button mat-raised-button (click)="onSubmit()">Edit Tournament</button>
+</form>
