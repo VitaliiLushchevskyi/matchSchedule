@@ -10,8 +10,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TeamPageComponent } from './team-page/team-page.component';
-import { PlayerInfoComponent } from './player-info/player-info.component';
-import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
+import { PlayerInfoComponent } from './players-list/player-info/player-info.component';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -36,11 +39,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../interceptors/token.interceptor';
 import { AddMatchToTheTournamentDialogComponent } from './tournaments-list/add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
 import { EditTournamentComponent } from './tournaments-list/edit-tournament-dialog/edit-tournament.component';
+import { PlayersListComponent } from './players-list/players-list.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
-  { path: 'teams/new', component: NewTeamComponent , canActivate: [AdminGuard]},
+  { path: 'teams/new', component: NewTeamComponent, canActivate: [AdminGuard] },
   { path: 'teams/:id', component: TeamPageComponent },
+  { path: 'players', component: PlayersListComponent },
   { path: 'players/:id', component: PlayerInfoComponent },
   { path: 'tournaments', component: TournamentsListComponent },
   {
@@ -63,6 +68,7 @@ const routes: Routes = [
     NewTeamComponent,
     AddPlayerDialogComponent,
     AddMatchToTheTournamentDialogComponent,
+    PlayersListComponent,
   ],
   imports: [
     CommonModule,
@@ -73,6 +79,7 @@ const routes: Routes = [
     FormsModule,
     NgSelectModule,
     NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,

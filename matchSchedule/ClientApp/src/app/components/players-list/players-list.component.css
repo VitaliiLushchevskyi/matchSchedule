@@ -1,0 +1,12 @@
+.teamLogo {
+  border-radius: 0%;
+  /* max-width: 100%;
+    height: auto; */
+  object-fit: scale-down;
+}
+.filter {
+  width: 100%;
+}
+.search {
+  width: 100%;
+}

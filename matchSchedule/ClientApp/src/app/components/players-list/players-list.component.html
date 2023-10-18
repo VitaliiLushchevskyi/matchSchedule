@@ -1,0 +1,55 @@
+<mat-form-field class="search">
+  <mat-label>Search</mat-label>
+  <input
+    matInput
+    (keyup)="applyFilter($event)"
+    placeholder="Enter player`s name... "
+  />
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource">
+  <ng-container matColumnDef="photo">
+    <th class="header" mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let player"></td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th class="header" mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let player">
+      {{ player.firstName }} {{ player.lastName }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="country">
+    <th class="header" mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let player">
+      <img class="flag" src="/assets/img/countries/{{ player.country }}.png" />
+      {{ player.country }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="team">
+    <th class="header" mat-header-cell *matHeaderCellDef>Team</th>
+    <td mat-cell *matCellDef="let player">
+      <img src="/assets/img/teamLogo/{{ player.team.logo }}" class="teamLogo" />
+      {{ player.team.name }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="position">
+    <th class="header" mat-header-cell *matHeaderCellDef>Position</th>
+    <td mat-cell *matCellDef="let player">{{ player.position }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="age">
+    <th class="header" mat-header-cell *matHeaderCellDef>Age</th>
+    <td mat-cell *matCellDef="let player"></td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let player; columns: columnsToDisplay"></tr>
+</table>
+<mat-paginator
+  [pageSizeOptions]="[10, 25, 50, 100]"
+  class="paginator"
+></mat-paginator>

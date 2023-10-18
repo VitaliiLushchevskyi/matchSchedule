@@ -107,7 +107,7 @@ namespace matchSchedule.Controllers
             return BadRequest(new { Message = "Failed to delete the tournament!" });
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPut("{id:Guid}/edit")]
         public async Task<ActionResult> Put(Guid id, [FromBody]TournamentEditDto model)
         {

@@ -16,6 +16,7 @@ namespace matchSchedule.Services.Implements
         {
             return await _appDbContext.Players
                 .Include(p => p.TeamHistory)
+                .Include(p=>p.Team)
                 .OrderBy(p => p.LastName)
                 .ToListAsync();
         }

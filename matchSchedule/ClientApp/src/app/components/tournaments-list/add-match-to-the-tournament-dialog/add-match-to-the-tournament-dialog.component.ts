@@ -5,6 +5,7 @@ import { NgToastComponent, NgToastService } from 'ng-angular-popup';
 import { MatchService } from 'src/app/services/match.service';
 import { TournamentService } from 'src/app/services/tournament.service';
 import { Tournament } from 'src/app/shared/tournament';
+import { NgxMatDatetimepicker } from '@angular-material-components/datetime-picker';
 
 @Component({
   selector: 'app-add-match-to-the-tournament-dialog',
