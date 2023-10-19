@@ -5,7 +5,8 @@ export class Player {
   playerId: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
+  age: number | null;
   country: string;
   height: number | null;
   weight: number | null;
@@ -14,4 +15,5 @@ export class Player {
   position: string;
   jerseyNumber: number | null;
   teamHistory: playerTeamHistory[] | null;
+  teamName: string | null;
 }

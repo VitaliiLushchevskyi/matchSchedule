@@ -13,7 +13,7 @@ namespace matchSchedule.Models
         public double? Height { get; set; }
         public double? Weight { get; set; }
         public Guid? TeamId { get; set; }
-        public Team Team { get; set; }
+        public Team Team { get; set; } = null;
         public string Position { get; set; }
         public int? JerseyNumber { get; set; }
         public ICollection<PlayerTeamHistory> TeamHistory { get; set; }

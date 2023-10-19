@@ -1,0 +1,63 @@
+<br />
+<form [formGroup]="playerForm">
+  <mat-form-field appearance="fill">
+    <mat-label>First name:</mat-label>
+    <input matInput formControlName="firstName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Last name:</mat-label>
+    <input matInput formControlName="lastName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Country:</mat-label>
+    <input matInput formControlName="country" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Date of birth:</mat-label>
+    <input
+      matInput
+      formControlName="dateOfbirth"
+      [matDatepicker]="dateOfBirthPicker"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      (click)="dateOfBirthPicker.open()"
+      [for]="dateOfBirthPicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Height:</mat-label>
+    <input matInput formControlName="height" type="number" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Weight:</mat-label>
+    <input matInput formControlName="weight" type="number" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select Team:</mat-label>
+    <mat-select formControlName="teamId">
+      <mat-option *ngFor="let team of teams" [value]="team.id">
+        {{ team.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Jersey number:</mat-label>
+    <input matInput formControlName="jerseyNumber" type="number" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Position:</mat-label>
+    <input matInput formControlName="position" />
+  </mat-form-field>
+  <br />
+  <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+</form>

@@ -40,6 +40,8 @@ import { TokenInterceptor } from '../interceptors/token.interceptor';
 import { AddMatchToTheTournamentDialogComponent } from './tournaments-list/add-match-to-the-tournament-dialog/add-match-to-the-tournament-dialog.component';
 import { EditTournamentComponent } from './tournaments-list/edit-tournament-dialog/edit-tournament.component';
 import { PlayersListComponent } from './players-list/players-list.component';
+import { PlayerService } from '../services/player.service';
+import { NewPlayerDialogComponent } from './players-list/new-player-dialog/new-player-dialog.component';
 
 const routes: Routes = [
   { path: 'teams', component: TeamsComponent },
@@ -69,6 +71,7 @@ const routes: Routes = [
     AddPlayerDialogComponent,
     AddMatchToTheTournamentDialogComponent,
     PlayersListComponent,
+    NewPlayerDialogComponent
   ],
   imports: [
     CommonModule,
@@ -93,6 +96,6 @@ const routes: Routes = [
     MatDialogModule,
     MatIconModule,
   ],
-  providers: [TeamService, TournamentService],
+  providers: [TeamService, TournamentService, PlayerService],
 })
 export class PageModule {}

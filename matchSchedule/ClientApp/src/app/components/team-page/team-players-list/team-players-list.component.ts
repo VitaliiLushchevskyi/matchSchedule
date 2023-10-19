@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { TeamService } from 'src/app/services/team.service';
 import { Player } from 'src/app/shared/player';
 import { Team } from 'src/app/shared/team';
+import { AddPlayerDialogComponent } from '../add-player-dialog/add-player-dialog.component';
+import { PlayerService } from 'src/app/services/player.service';
 
 @Component({
   selector: 'app-team-players-list',
@@ -17,19 +19,34 @@ export class TeamPlayersListComponent implements OnInit {
   players: Player[];
   dataSource: any;
 
-  displayedColumns: string[] = ['jerseyNumber', 'name', 'age', 'country','position' , 'height','weight'];
+  displayedColumns: string[] = [
+    'jerseyNumber',
+    'name',
+    'age',
+    'country',
+    'position',
+    'height',
+    'weight',
+  ];
 
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
-    private service: TeamService,
+    private teamService: TeamService,
+    private playerService: PlayerService,
     private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
     let teamId = this.activatedRoute.snapshot.paramMap.get('id')!;
-    this.service.loadTeamById(teamId).subscribe((data) => {
+    this.teamService.loadTeamById(teamId).subscribe((data) => {
       this.team = data;
       this.players = data.players;
-      this.dataSource = new MatTableDataSource(this.team.players);
+      if (this.team && this.team.players) {
+        this.players.forEach((player: Player) => {
+          player.age = this.playerService.calculateAge(player.dateOfBirth);
+        });
+      }
+
+      this.dataSource = new MatTableDataSource(this.players);
       this.dataSource.sort = this.sort;
     });
   }
@@ -43,24 +60,4 @@ export class TeamPlayersListComponent implements OnInit {
       this._liveAnnouncer.announce('Sorting cleared');
     }
   }
-
-  // calculateAge(birthDate: string): number {
-  //   const _birthDate = new Date(birthDate);
-  //   const today = new Date();
-  //   const birthYear = _birthDate.getFullYear();
-  //   const currentYear = today.getFullYear();
-  //   let age = currentYear - birthYear;
-
-  //   const birthMonth = _birthDate.getMonth();
-  //   const currentMonth = today.getMonth();
-
-  //   if (
-  //     currentMonth < birthMonth ||
-  //     (currentMonth === birthMonth && today.getDate() < _birthDate.getDate())
-  //   ) {
-  //     age--;
-  //   }
-
-  //   return age;
-  // }
 }

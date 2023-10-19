@@ -7,21 +7,42 @@
   />
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource">
+<button mat-raised-button (click)="openAddDialog()">Add player</button>
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  (matSortChange)="announceSortChange($event)"
+  class="mat-elevation-z8"
+>
   <ng-container matColumnDef="photo">
     <th class="header" mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let player"></td>
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <th class="header" mat-header-cell *matHeaderCellDef>Name</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by name"
+    >
+      Name
+    </th>
     <td mat-cell *matCellDef="let player">
-      {{ player.firstName }} {{ player.lastName }}
+      {{ player.fullName }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="country">
-    <th class="header" mat-header-cell *matHeaderCellDef>Country</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Country"
+    >
+      Country
+    </th>
     <td mat-cell *matCellDef="let player">
       <img class="flag" src="/assets/img/countries/{{ player.country }}.png" />
       {{ player.country }}
@@ -29,7 +50,14 @@
   </ng-container>
 
   <ng-container matColumnDef="team">
-    <th class="header" mat-header-cell *matHeaderCellDef>Team</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Team"
+    >
+      Team
+    </th>
     <td mat-cell *matCellDef="let player">
       <img src="/assets/img/teamLogo/{{ player.team.logo }}" class="teamLogo" />
       {{ player.team.name }}
@@ -37,18 +65,28 @@
   </ng-container>
 
   <ng-container matColumnDef="position">
-    <th class="header" mat-header-cell *matHeaderCellDef>Position</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by PositionLul"
+    >
+      Position
+    </th>
     <td mat-cell *matCellDef="let player">{{ player.position }}</td>
   </ng-container>
 
   <ng-container matColumnDef="age">
     <th class="header" mat-header-cell *matHeaderCellDef>Age</th>
-    <td mat-cell *matCellDef="let player"></td>
+    <td mat-cell *matCellDef="let player">
+      {{ player.age }}
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
   <tr mat-row *matRowDef="let player; columns: columnsToDisplay"></tr>
 </table>
+
 <mat-paginator
   [pageSizeOptions]="[10, 25, 50, 100]"
   class="paginator"
