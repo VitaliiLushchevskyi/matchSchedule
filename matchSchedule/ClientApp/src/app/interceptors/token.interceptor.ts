@@ -11,7 +11,9 @@ import { AuthService } from '../services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
@@ -33,6 +35,7 @@ export class TokenInterceptor implements HttpInterceptor {
         },
       });
     }
+
     return next.handle(request).pipe(
       catchError((err: any) => {
         console.log(err);
@@ -42,6 +45,7 @@ export class TokenInterceptor implements HttpInterceptor {
               detail: 'Warning!',
               summary: 'Token is expired, Please login again!',
             });
+            this.router.navigate(['login']);
           }
         }
         return throwError(() => new Error('Unknown error!'));

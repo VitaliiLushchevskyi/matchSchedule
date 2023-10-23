@@ -71,7 +71,7 @@ const routes: Routes = [
     AddPlayerDialogComponent,
     AddMatchToTheTournamentDialogComponent,
     PlayersListComponent,
-    NewPlayerDialogComponent
+    NewPlayerDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -96,6 +96,11 @@ const routes: Routes = [
     MatDialogModule,
     MatIconModule,
   ],
-  providers: [TeamService, TournamentService, PlayerService],
+  providers: [
+    TeamService,
+    TournamentService,
+    PlayerService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+  ],
 })
 export class PageModule {}

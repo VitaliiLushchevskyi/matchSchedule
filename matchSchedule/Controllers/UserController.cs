@@ -2,6 +2,7 @@
 using matchSchedule.Helpers;
 using matchSchedule.Models;
 using matchSchedule.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -99,7 +100,7 @@ namespace matchSchedule.Controllers
                 Issuer = _config["Tokens:Issuer"],
                 Audience = _config["Tokens:Audience"],
                 Subject = identity,
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddSeconds(7),
                 SigningCredentials = credentials,
             };
 
@@ -124,8 +125,11 @@ namespace matchSchedule.Controllers
 
         }
 
-
-
-
+        [HttpGet("getSmth")]
+        [Authorize]
+        public ActionResult Get(string q)
+        {
+            return Ok(q);
+        }
     }
 }

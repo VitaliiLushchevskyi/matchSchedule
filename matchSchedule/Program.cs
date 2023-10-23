@@ -53,27 +53,6 @@ builder.Services
         };
     });
        
-
-
-
-//builder.Services.AddAuthentication()
-//    .AddCookie()
-//    .AddJwtBearer(cfg =>
-//    {
-//        cfg.TokenValidationParameters = new TokenValidationParameters()
-//        {
-//            ValidIssuer = builder.Configuration["Tokens:Issuer"],
-//            ValidAudience = builder.Configuration["Tokens:Audience"],
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"])),
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = false,
-//            ValidateIssuerSigningKey = true,
-
-//        };
-//    });
-
-
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IMatchService, MatchService>();
@@ -87,16 +66,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
-//builder.Services.AddCors(option =>
-//{
-//    option.AddPolicy("MyPolicy", builder =>
-//    {
-//        builder.AllowAnyOrigin()
-//        .AllowAnyMethod()
-//        .AllowAnyHeader();
-
-//    });
-//});
 
 var app = builder.Build();
 
