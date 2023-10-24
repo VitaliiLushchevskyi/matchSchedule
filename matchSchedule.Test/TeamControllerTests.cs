@@ -5,6 +5,7 @@ using matchSchedule.Models;
 using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -48,11 +49,10 @@ namespace matchSchedule.Test
         {
             // Arrange
             Guid validId = Guid.NewGuid();
-            var mockTeamService = new Mock<ITeamService>();
-            mockTeamService.Setup(service => service.GetTeamByIdAsync(validId))
+            _service.Setup(service => service.GetTeamByIdAsync(validId))
                            .ReturnsAsync(new Team { Id = validId});
 
-            var controller = new TeamController(mockTeamService.Object, null, null);
+            var controller = new TeamController(_service.Object, null, null);
 
             // Act
             var result = await controller.Get(validId);
@@ -61,5 +61,42 @@ namespace matchSchedule.Test
             var okResult = Assert.IsType<OkObjectResult>(result);
            
         }
+
+        [Fact]
+        public async Task AddPlayerToTeam_ReturnsOkWithData()
+        {
+            //Arrange
+            var validPlayerId = new Guid();
+            var validTeamId = new Guid();
+            _service.Setup(service => service.AddPlayerAsync(validTeamId, validPlayerId)).ReturnsAsync(new Team { Id = validTeamId, Players = new List<Player> { new Player { PlayerId = validPlayerId } } });
+
+            var controller = new TeamController(_service.Object, null, null);
+
+            //Act
+            var result = await controller.Post(validTeamId, validPlayerId);
+
+            //Assert
+            var okresult = Assert.IsType<OkObjectResult>(result);
+            var returnedData = Assert.IsAssignableFrom<Team>(okresult.Value);
+            Assert.Equal(returnedData.Players.First(i => i.PlayerId == validPlayerId).PlayerId, validPlayerId);
+
+        }
+
+        [Fact]
+        public async Task AddPlayerToTeam_ReturnsBadRequest()
+        {
+            //Arrange
+            var invalidId = Guid.Empty;
+            var validPlayerId = Guid.NewGuid();
+            _service.Setup(service => service.AddPlayerAsync(invalidId, validPlayerId)).ReturnsAsync(null as Team);
+            var controller = new TeamController(_service.Object, null, null);
+
+            //Act
+            var result = await controller.Post(invalidId, validPlayerId);
+
+            //Assert
+            var statusResult = Assert.IsType<BadRequestObjectResult>(result);
+        }
     }
+
 }

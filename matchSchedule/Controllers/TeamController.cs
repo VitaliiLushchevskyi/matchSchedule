@@ -53,33 +53,33 @@ namespace matchSchedule.Controllers
             }
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        //[HttpPost("new")]
-        //public async Task<IActionResult> Post([FromBody] TeamViewModel team)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var players = await _teamService.GetPlayersByIdsAsync(team.PlayerIds);
-        //            var newTeam = _mapper.Map<TeamViewModel, Team>(team);
-        //            newTeam.Players = players;
-        //            _teamService.AddEntity(newTeam);
-        //            if (_teamService.SaveAll())
-        //            {
-        //                return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, TeamViewModel>(newTeam));
-        //            }
-        //        }
-        //        else
-        //            return BadRequest(ModelState);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //    }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPost("new")]
+        public async Task<IActionResult> Post([FromBody] TeamViewModel team)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var players = await _teamService.GetPlayersByIdsAsync(team.PlayerIds);
+                    var newTeam = _mapper.Map<TeamViewModel, Team>(team);
+                    newTeam.Players = players;
+                    _teamService.AddEntity(newTeam);
+                    if (_teamService.SaveAll())
+                    {
+                        return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, TeamViewModel>(newTeam));
+                    }
+                }
+                else
+                    return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
-        //    return BadRequest("Failed to post the team!");
-        //}
+            return BadRequest("Failed to post the team!");
+        }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost]
@@ -88,7 +88,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _teamService.AddPlayerAsync(teamId, playerId));
+                var result = await _teamService.AddPlayerAsync(teamId, playerId);
+                if (result == null)
+                {
+                    return BadRequest("Invalid team or player!");
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {

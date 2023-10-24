@@ -59,6 +59,8 @@ namespace matchSchedule.Services.Implements
         {
             var team = await GetTeamByIdAsync(teamId);
             var player = await _appDbContext.Players.Where(p => p.PlayerId == playerId).FirstOrDefaultAsync();
+            if (player == null || team == null)
+                return null;
             team.Players.Add(player);
             await SaveAllAsync();
             return team;
