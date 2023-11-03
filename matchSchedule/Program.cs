@@ -1,4 +1,5 @@
 using matchSchedule.Context;
+using matchSchedule.Models;
 using matchSchedule.Services.Implements;
 using matchSchedule.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,11 +26,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(
         name: "AllowOrigin",
-        builder => {
+        builder =>
+        {
             builder.WithOrigins("https://localhost:44447")
                        .AllowAnyHeader()
                     .AllowAnyMethod();
-                    
+
         });
 });
 
@@ -49,16 +51,19 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-          
+
         };
     });
-       
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+
 builder.Services.AddScoped<ITeamService, TeamService>();
+
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
-
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddEndpointsApiExplorer();

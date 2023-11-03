@@ -12,18 +12,29 @@ namespace matchSchedule.Services.Implements
         {
             _appDbContext = appDbContext;
         }
+
+        public async void AddEntityAsync(Team entity)
+        {
+          await _appDbContext.AddAsync(entity);
+        }
+
+        public void AddEntity(Team entity)
+        {
+           _appDbContext.AddAsync(entity);
+        }
+
         public async Task<List<Team>> GetAllAsync()
         {
             return await _appDbContext.Teams
-                .Include(t => t.Players)
-                .Include(t => t.Coaches)
-                .Include(t => t.TournamentsWon)
-                .Include(t => t.Matches)
-                .OrderBy(t => t.Name)
-                .ToListAsync();
+               .Include(t => t.Players)
+               .Include(t => t.Coaches)
+               .Include(t => t.TournamentsWon)
+               .Include(t => t.Matches)
+               .OrderBy(t => t.Name)
+               .ToListAsync(); 
         }
 
-        public async Task<Team> GetTeamByIdAsync(Guid id)
+        public async Task<Team> GetByIdAsync(Guid id)
         {
             return await _appDbContext.Teams
                 .Include(t => t.Players
@@ -35,29 +46,24 @@ namespace matchSchedule.Services.Implements
                 .FirstOrDefaultAsync();
         }
 
-        public void AddEntity(object model)
+        public void RemoveEntity(Team entity)
         {
-            _appDbContext.Add(model);
-
+            _appDbContext.Remove(entity);
         }
-        public void RemoveEntity(object model)
+
+        public bool SaveAll()
         {
-            _appDbContext.Remove(model);
+            return _appDbContext.SaveChanges() > 0;
         }
 
         public async Task<bool> SaveAllAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
-        public bool SaveAll()
-        {
-            return _appDbContext.SaveChanges() > 0;
-        }
-
 
         public async Task<Team> AddPlayerAsync(Guid teamId, Guid playerId)
         {
-            var team = await GetTeamByIdAsync(teamId);
+            var team = await GetByIdAsync(teamId);
             var player = await _appDbContext.Players.Where(p => p.PlayerId == playerId).FirstOrDefaultAsync();
             if (player == null || team == null)
                 return null;
@@ -68,7 +74,7 @@ namespace matchSchedule.Services.Implements
 
         public async Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds)
         {
-            var team = await GetTeamByIdAsync(teamId);
+            var team = await GetByIdAsync(teamId);
             if (team == null)
             {
                 return false;
@@ -100,5 +106,5 @@ namespace matchSchedule.Services.Implements
             return await _appDbContext.Players.Where(player => ids.Contains(player.PlayerId)).ToListAsync();
         }
 
-     }
+    }
 }

@@ -5,7 +5,6 @@ using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace matchSchedule.Controllers
 {
@@ -44,7 +43,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetMatchByIdAsync(id));
+                return Ok(await _service.GetByIdAsync(id));
             }
             catch (Exception ex)
             {

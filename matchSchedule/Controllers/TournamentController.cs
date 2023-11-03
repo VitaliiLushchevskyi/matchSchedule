@@ -6,7 +6,6 @@ using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Controllers
 {
@@ -44,7 +43,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetTournamentByIdAsync(id));
+                return Ok(await _service.GetByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -53,7 +52,7 @@ namespace matchSchedule.Controllers
             }
         }
 
-  
+
         [HttpPost("new")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> Post([FromBody] TournamentViewModel model)
@@ -89,8 +88,8 @@ namespace matchSchedule.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {                 
-                    var tournament = await _service.GetTournamentByIdAsync(id);   
+                {
+                    var tournament = await _service.GetByIdAsync(id);
                     if (tournament == null)
                         return NotFound($"The tournament with id: {id} wasn`t found");
                     _service.RemoveEntity(tournament);
@@ -109,14 +108,14 @@ namespace matchSchedule.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPut("{id:Guid}/edit")]
-        public async Task<ActionResult> Put(Guid id, [FromBody]TournamentEditDto model)
+        public async Task<ActionResult> Put(Guid id, [FromBody] TournamentEditDto model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                   var editedTournament = await _service.EditTournamentByIdAsync(id, model);
-                   if(editedTournament == null)
+                    var editedTournament = await _service.EditTournamentByIdAsync(id, model);
+                    if (editedTournament == null)
                         return BadRequest(NotFound());
                     return (Ok(editedTournament));
                 }

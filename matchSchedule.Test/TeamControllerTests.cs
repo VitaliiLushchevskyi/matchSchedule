@@ -1,14 +1,9 @@
 ﻿using AutoFixture;
-using AutoMapper;
 using matchSchedule.Controllers;
 using matchSchedule.Models;
-using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
-using matchSchedule.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
 
 namespace matchSchedule.Test
 {
@@ -23,7 +18,7 @@ namespace matchSchedule.Test
             _service = new Mock<ITeamService>();
             _logger = new Mock<ILogger<TeamController>>();
             _fixture = new Fixture();
-            _controller = new TeamController(_service.Object, _logger.Object, null);
+            _controller = new TeamController(_service.Object, _logger.Object, null,null);
         }
 
 
@@ -50,16 +45,16 @@ namespace matchSchedule.Test
             // Arrange
             Guid validId = Guid.NewGuid();
             _service.Setup(service => service.GetTeamByIdAsync(validId))
-                           .ReturnsAsync(new Team { Id = validId});
+                           .ReturnsAsync(new Team { Id = validId });
 
-            var controller = new TeamController(_service.Object, null, null);
+            var controller = new TeamController(_service.Object, null, null,null);
 
             // Act
             var result = await controller.Get(validId);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-           
+
         }
 
         [Fact]

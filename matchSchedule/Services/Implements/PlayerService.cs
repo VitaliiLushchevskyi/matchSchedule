@@ -16,7 +16,7 @@ namespace matchSchedule.Services.Implements
         {
             return await _appDbContext.Players
                 .Include(p => p.TeamHistory)
-                .Include(p=>p.Team)
+                .Include(p => p.Team)
                 .OrderBy(p => p.LastName)
                 .ToListAsync();
         }
@@ -27,16 +27,6 @@ namespace matchSchedule.Services.Implements
                 .Include(p => p.TeamHistory)
                 .Where(p => p.PlayerId == id)
                 .FirstOrDefaultAsync();
-        }
-
-        public void AddEntity(object model)
-        {
-            _appDbContext.Add(model);
-
-        }
-        public void RemoveEntity(object model)
-        {
-            _appDbContext.Remove(model);
         }
 
         public async Task<bool> SaveAllAsync()
@@ -51,7 +41,27 @@ namespace matchSchedule.Services.Implements
 
         public async Task<List<Player>> GetFreePlayersAsync()
         {
-           return await _appDbContext.Players.Where(p=>p.TeamId == null).ToListAsync();
+            return await _appDbContext.Players.Where(p => p.TeamId == null).ToListAsync();
+        }
+
+        public Task<Player> GetByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddEntity(Player entity)
+        {
+            _appDbContext.Add(entity);
+        }
+
+        public async void AddEntityAsync(Player entity)
+        {
+            await _appDbContext.AddAsync(entity);
+        }
+
+        public void RemoveEntity(Player entity)
+        {
+            _appDbContext.Remove(entity);
         }
     }
 }

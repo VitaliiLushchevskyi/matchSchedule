@@ -17,7 +17,7 @@ namespace matchSchedule.Services.Implements
         {
             return await _appDbContext.Tournaments
                 .Include(t => t.Teams)
-                .Include(t=>t.Matches.OrderBy(m => m.MatchDateTime))
+                .Include(t => t.Matches.OrderBy(m => m.MatchDateTime))
                 .Include(t => t.Matches)
                     .ThenInclude(i => i.HomeTeam)
                 .Include(t => t.Matches)
@@ -26,7 +26,7 @@ namespace matchSchedule.Services.Implements
                 .ToListAsync();
         }
 
-        public async Task<Tournament> GetTournamentByIdAsync(Guid id)
+        public async Task<Tournament> GetByIdAsync(Guid id)
         {
             return await _appDbContext.Tournaments
                 .Include(t => t.Teams)
@@ -35,14 +35,19 @@ namespace matchSchedule.Services.Implements
                 .FirstOrDefaultAsync();
         }
 
-        public void AddEntity(object model)
+        public void AddEntity(Tournament entity)
         {
-            _appDbContext.Add(model);
-
+            _appDbContext.Add(entity);
         }
-        public void RemoveEntity(object model)
+
+        public async void AddEntityAsync(Tournament entity)
         {
-            _appDbContext.Remove(model);
+            await _appDbContext.AddAsync(entity);
+        }
+
+        public void RemoveEntity(Tournament entity)
+        {
+            _appDbContext.Remove(entity);
         }
 
         public async Task<bool> SaveAllAsync()
@@ -61,8 +66,8 @@ namespace matchSchedule.Services.Implements
 
         public async Task<Tournament> EditTournamentByIdAsync(Guid id, TournamentEditDto model)
         {
-            var tournament = await GetTournamentByIdAsync(id);
-            if(tournament == null)
+            var tournament = await GetByIdAsync(id);
+            if (tournament == null)
                 return null;
             tournament.Name = model.Name;
             tournament.Location = model.Location;
@@ -75,7 +80,7 @@ namespace matchSchedule.Services.Implements
                 return tournament;
             }
             else { return null; }
-            
+
         }
     }
 }

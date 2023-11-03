@@ -21,7 +21,7 @@ namespace matchSchedule.Services.Implements
                 .ToListAsync();
         }
 
-        public async Task<Match> GetMatchByIdAsync(Guid id)
+        public async Task<Match> GetByIdAsync(Guid id)
         {
             return await _appDbContext.Matches
                 .Where(m => m.MatchId == id)
@@ -47,16 +47,6 @@ namespace matchSchedule.Services.Implements
                 .FirstOrDefault();
         }
 
-        public void AddEntity(object model)
-        {
-            _appDbContext.Add(model);
-
-        }
-        public void RemoveEntity(object model)
-        {
-            _appDbContext.Remove(model);
-        }
-
         public async Task<bool> SaveAllAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
@@ -65,6 +55,21 @@ namespace matchSchedule.Services.Implements
         public bool SaveAll()
         {
             return _appDbContext.SaveChanges() > 0;
+        }
+
+        public void AddEntity(Match entity)
+        {
+            _appDbContext.Add(entity);
+        }
+
+        public async void AddEntityAsync(Match entity)
+        {
+            await _appDbContext.AddAsync(entity);
+        }
+
+        public void RemoveEntity(Match entity)
+        {
+            _appDbContext.Remove(entity);
         }
     }
 }

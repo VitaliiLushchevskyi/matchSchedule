@@ -5,7 +5,7 @@ using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
+using System.Linq.Expressions;
 
 namespace matchSchedule.Controllers
 {
@@ -13,15 +13,17 @@ namespace matchSchedule.Controllers
     [ApiController]
     public class TeamController : ControllerBase
     {
-        private readonly ITeamService _teamService;
+
         private readonly ILogger<TeamController> _logger;
         private readonly IMapper _mapper;
-        public TeamController(ITeamService teamService, ILogger<TeamController> logger, IMapper mapper)
+        private readonly ITeamService _service;
+        public TeamController(ILogger<TeamController> logger, IMapper mapper, ITeamService service)
         {
-            _teamService = teamService;
+         
             _logger = logger;
-            _mapper = mapper
-            ;
+            _mapper = mapper;
+            _service = service;
+
         }
 
         [HttpGet]
@@ -30,7 +32,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _teamService.GetAllAsync());
+                return Ok(await _service.GetAllAsync());
             }
             catch (Exception ex)
             {
@@ -44,7 +46,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _teamService.GetTeamByIdAsync(id));
+                return Ok(await _service.GetByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -61,11 +63,11 @@ namespace matchSchedule.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var players = await _teamService.GetPlayersByIdsAsync(team.PlayerIds);
+                    var players = await _service.GetPlayersByIdsAsync(team.PlayerIds);
                     var newTeam = _mapper.Map<TeamViewModel, Team>(team);
                     newTeam.Players = players;
-                    _teamService.AddEntity(newTeam);
-                    if (_teamService.SaveAll())
+                    _service.AddEntity(newTeam);
+                    if (_service.SaveAll())
                     {
                         return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, TeamViewModel>(newTeam));
                     }
@@ -88,7 +90,7 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                var result = await _teamService.AddPlayerAsync(teamId, playerId);
+                var result = await _service.AddPlayerAsync(teamId, playerId);
                 if (result == null)
                 {
                     return BadRequest("Invalid team or player!");
@@ -107,7 +109,7 @@ namespace matchSchedule.Controllers
         [Route("{teamId:Guid}/addListOfPlayers")]
         public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)
         {
-            var result = await _teamService.AddListOfPlayersAsync(teamId, playersIds);
+            var result = await _service.AddListOfPlayersAsync(teamId, playersIds);
             if (result)
                 return Ok("Successful!");
             else
@@ -122,11 +124,11 @@ namespace matchSchedule.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var tournament = await _teamService.GetTeamByIdAsync(id);
+                    var tournament = await _service.GetByIdAsync(id);
                     if (tournament == null)
                         return NotFound($"The team with id: {id} wasn`t found");
-                    _teamService.RemoveEntity(tournament);
-                    if (_teamService.SaveAll())
+                    _service.RemoveEntity(tournament);
+                    if (_service.SaveAll())
                         return NoContent();
                 }
                 else
@@ -139,6 +141,6 @@ namespace matchSchedule.Controllers
             return BadRequest(new { Message = "Failed to delete the team!" });
         }
 
-    
-}
+
+    }
 }
