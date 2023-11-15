@@ -1,5 +1,4 @@
 using matchSchedule.Context;
-using matchSchedule.Models;
 using matchSchedule.Services.Implements;
 using matchSchedule.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -55,11 +54,7 @@ builder.Services
         };
     });
 
-
-
 builder.Services.AddScoped<ITeamService, TeamService>();
-
-
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();

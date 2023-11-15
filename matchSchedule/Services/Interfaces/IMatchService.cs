@@ -7,6 +7,6 @@ namespace matchSchedule.Services.Interfaces
 
         Tournament GetTournamentById(Guid id);
         Team GetTeamById(Guid id);
-        
+
     }
 }

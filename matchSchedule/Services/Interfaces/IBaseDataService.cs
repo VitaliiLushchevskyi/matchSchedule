@@ -1,7 +1,4 @@
-﻿using matchSchedule.Models;
-using System.Linq.Expressions;
-
-namespace matchSchedule.Services.Interfaces
+﻿namespace matchSchedule.Services.Interfaces
 {
     public interface IBaseDataService<T>
     {

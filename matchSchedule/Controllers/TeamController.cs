@@ -5,7 +5,6 @@ using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace matchSchedule.Controllers
 {
@@ -19,7 +18,7 @@ namespace matchSchedule.Controllers
         private readonly ITeamService _service;
         public TeamController(ILogger<TeamController> logger, IMapper mapper, ITeamService service)
         {
-         
+
             _logger = logger;
             _mapper = mapper;
             _service = service;

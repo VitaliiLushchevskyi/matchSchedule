@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.Models.Errors;
 using matchSchedule.Services.Interfaces;
 using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,7 +21,6 @@ namespace matchSchedule.Controllers
             _service = service;
             _logger = logger;
             _mapper = mapper;
-
         }
 
         [HttpGet]
@@ -55,39 +55,35 @@ namespace matchSchedule.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("createMatch")]
-        public IActionResult Post([FromBody] MatchViewModel model)
+        public async Task<Result> Post([FromBody] MatchViewModel model)
         {
-            try
+            var tournament = _service.GetTournamentById(model.Tournament.Id);
+            var homeTeam = _service.GetTeamById(model.HomeTeamId);
+            var awayTeam = _service.GetTeamById(model.AwayTeamId);
+
+            if (tournament == null)
             {
-                if (ModelState.IsValid)
-                {
-                    var tournament = _service.GetTournamentById(model.Tournament.Id);
-                    var homeTeam = _service.GetTeamById(model.HomeTeamId);
-                    var awayTeam = _service.GetTeamById(model.AwayTeamId);
-
-
-                    var newModel = _mapper.Map<MatchViewModel, Match>(model);
-                    newModel.Tournament = tournament;
-                    newModel.HomeTeam = homeTeam;
-                    newModel.AwayTeam = awayTeam;
-
-                    _service.AddEntity(newModel);
-                    if (_service.SaveAll())
-                    {
-                        return Created($"/api/match/{newModel.MatchId}", _mapper.Map<Match, MatchViewModel>(newModel));
-                    }
-                }
-                else
-                    return BadRequest(ModelState);
+                return Result.Failure(MatchErrors.NotFoundTournament);
             }
-            catch (Exception ex)
+            if (homeTeam == awayTeam)
             {
-                _logger.LogError(ex.Message);
+                return Result.Failure(MatchErrors.SameTeams);
+            }
+            // put it in a separate method 
+            var newModel = _mapper.Map<MatchViewModel, Match>(model);
+            newModel.Tournament = tournament;
+            newModel.HomeTeam = homeTeam;
+            newModel.AwayTeam = awayTeam;
+            _service.AddEntityAsync(newModel);
+            if (await _service.SaveAllAsync())
+            {
+                return Result.Success();
             }
 
-            return BadRequest("Failed to post the match!");
+            return Result.Failure(MatchErrors.BadRequest);
+
         }
+
     }
 
 }
-

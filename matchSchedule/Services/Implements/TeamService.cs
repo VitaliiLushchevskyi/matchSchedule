@@ -15,12 +15,12 @@ namespace matchSchedule.Services.Implements
 
         public async void AddEntityAsync(Team entity)
         {
-          await _appDbContext.AddAsync(entity);
+            await _appDbContext.AddAsync(entity);
         }
 
         public void AddEntity(Team entity)
         {
-           _appDbContext.AddAsync(entity);
+            _appDbContext.AddAsync(entity);
         }
 
         public async Task<List<Team>> GetAllAsync()
@@ -31,7 +31,7 @@ namespace matchSchedule.Services.Implements
                .Include(t => t.TournamentsWon)
                .Include(t => t.Matches)
                .OrderBy(t => t.Name)
-               .ToListAsync(); 
+               .ToListAsync();
         }
 
         public async Task<Team> GetByIdAsync(Guid id)

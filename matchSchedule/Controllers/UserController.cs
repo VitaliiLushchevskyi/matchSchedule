@@ -99,7 +99,7 @@ namespace matchSchedule.Controllers
                 Issuer = _config["Tokens:Issuer"],
                 Audience = _config["Tokens:Audience"],
                 Subject = identity,
-                Expires = DateTime.Now.AddSeconds(7),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = credentials,
             };
 
