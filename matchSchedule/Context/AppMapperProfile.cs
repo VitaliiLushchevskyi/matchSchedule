@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.ViewModels;
 
 namespace matchSchedule.Context
@@ -11,6 +12,10 @@ namespace matchSchedule.Context
             CreateMap<Team, TeamViewModel>()
                 .ForMember(t => t.TeamId, m => m.MapFrom(t => t.Id))
                 .ReverseMap();
+
+            CreateMap<Match, NewMatchDTO>()
+               .ForMember(m => m.MatchId, map => map.MapFrom(m => m.MatchId))
+               .ReverseMap();
 
             CreateMap<Player, PlayerViewModel>()
                 .ForMember(p => p.PlayerId, m => m.MapFrom(p => p.PlayerId))

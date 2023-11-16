@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using matchSchedule.Models;
 using matchSchedule.Models.Errors;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
-using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,33 +54,20 @@ namespace matchSchedule.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("createMatch")]
-        public async Task<Result> Post([FromBody] MatchViewModel model)
+        public async Task<Result> Post([FromBody] NewMatchDTO model)
         {
-            var tournament = _service.GetTournamentById(model.Tournament.Id);
-            var homeTeam = _service.GetTeamById(model.HomeTeamId);
-            var awayTeam = _service.GetTeamById(model.AwayTeamId);
-
-            if (tournament == null)
-            {
-                return Result.Failure(MatchErrors.NotFoundTournament);
-            }
-            if (homeTeam == awayTeam)
-            {
+            if (model.AwayTeamId == model.HomeTeamId)
                 return Result.Failure(MatchErrors.SameTeams);
-            }
-            // put it in a separate method 
-            var newModel = _mapper.Map<MatchViewModel, Match>(model);
-            newModel.Tournament = tournament;
-            newModel.HomeTeam = homeTeam;
-            newModel.AwayTeam = awayTeam;
-            _service.AddEntityAsync(newModel);
-            if (await _service.SaveAllAsync())
-            {
+
+            if (model.Tournament == null)
+                return Result.Failure(MatchErrors.NotFoundTournament);
+
+            var createdMatch = await _service.AddMatchAsync(model);
+
+            if (createdMatch != null)
                 return Result.Success();
-            }
 
             return Result.Failure(MatchErrors.BadRequest);
-
         }
 
     }

@@ -1,5 +1,7 @@
-﻿using matchSchedule.Context;
+﻿using AutoMapper;
+using matchSchedule.Context;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +10,11 @@ namespace matchSchedule.Services.Implements
     public class MatchService : IMatchService
     {
         private readonly AppDbContext _appDbContext;
-        public MatchService(AppDbContext appDbContext)
+        private readonly IMapper _mapper;
+        public MatchService(AppDbContext appDbContext, IMapper mapper)
         {
             _appDbContext = appDbContext;
+            _mapper = mapper;
         }
         public async Task<List<Match>> GetAllAsync()
         {
@@ -27,26 +31,39 @@ namespace matchSchedule.Services.Implements
                 .Where(m => m.MatchId == id)
                 .FirstOrDefaultAsync();
         }
-        public Tournament GetTournamentById(Guid id)
+        public async Task<Tournament> GetTournamentByIdAsync(Guid id)
         {
-            return _appDbContext.Tournaments
+            return await _appDbContext.Tournaments
                 .Include(t => t.Teams)
                 .Include(t => t.Matches)
                 .Where(t => t.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public Team GetTeamById(Guid id)
+        public async Task<Team> GetTeamByIdAsync(Guid id)
         {
-            return _appDbContext.Teams
+            return await _appDbContext.Teams
                 .Include(t => t.Players)
                 .Include(t => t.Coaches)
                 .Include(t => t.TournamentsWon)
                 .Include(t => t.Matches)
                 .Where(t => t.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
-
+        public async Task<Match> AddMatchAsync(NewMatchDTO model)
+        {
+            var tournament = await GetTournamentByIdAsync(model.Tournament.Id);
+            var homeTeam = await GetTeamByIdAsync(model.HomeTeamId);
+            var awayTeam = await GetTeamByIdAsync(model.AwayTeamId);
+            var newModel = _mapper.Map<NewMatchDTO, Match>(model);
+            newModel.Tournament = tournament;
+            newModel.HomeTeam = homeTeam;
+            newModel.AwayTeam = awayTeam;
+            AddEntityAsync(newModel);
+            if (await SaveAllAsync())
+                return newModel;
+            return null;
+        }
         public async Task<bool> SaveAllAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
@@ -71,5 +88,7 @@ namespace matchSchedule.Services.Implements
         {
             _appDbContext.Remove(entity);
         }
+
+
     }
 }
