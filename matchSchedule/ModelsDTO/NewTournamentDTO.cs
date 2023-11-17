@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace matchSchedule.ViewModels
+namespace matchSchedule.ModelsDTO
 {
-    public class TournamentViewModel
+    public class NewTournamentDTO
     {
         [Key]
         public Guid TournamentId { get; set; }
@@ -12,6 +12,5 @@ namespace matchSchedule.ViewModels
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
         public ICollection<Guid> TeamIds { get; set; }
-
     }
 }

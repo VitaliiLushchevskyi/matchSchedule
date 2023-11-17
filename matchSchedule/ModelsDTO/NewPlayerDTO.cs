@@ -1,6 +1,6 @@
-﻿namespace matchSchedule.ViewModels
+﻿namespace matchSchedule.ModelsDTO
 {
-    public class PlayerViewModel
+    public class NewPlayerDTO
     {
         public Guid PlayerId { get; set; }
         public string FirstName { get; set; }

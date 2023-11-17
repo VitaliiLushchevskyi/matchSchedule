@@ -2,7 +2,6 @@
 using matchSchedule.Models;
 using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
-using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,19 +54,19 @@ namespace matchSchedule.Controllers
 
         [HttpPost("new")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> Post([FromBody] TournamentViewModel model)
+        public async Task<IActionResult> Post([FromBody] NewTournamentDTO model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var teams = await _service.GetTeamsByIdAsync(model.TeamIds);
-                    var newModel = _mapper.Map<TournamentViewModel, Tournament>(model);
+                    var newModel = _mapper.Map<NewTournamentDTO, Tournament>(model);
                     newModel.Teams = teams;
                     _service.AddEntity(newModel);
                     if (_service.SaveAll())
                     {
-                        return Created($"/api/tournaments/{newModel.Id}", _mapper.Map<Tournament, TournamentViewModel>(newModel));
+                        return Created($"/api/tournaments/{newModel.Id}", _mapper.Map<Tournament, NewTournamentDTO>(newModel));
                     }
                 }
                 else

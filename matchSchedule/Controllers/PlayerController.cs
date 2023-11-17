@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
-using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,17 +69,17 @@ namespace matchSchedule.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost]
         [Route("createPlayer")]
-        public IActionResult Post([FromBody] PlayerViewModel player)
+        public IActionResult Post([FromBody] NewPlayerDTO player)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var newPlayer = _mapper.Map<PlayerViewModel, Player>(player);
+                    var newPlayer = _mapper.Map<NewPlayerDTO, Player>(player);
                     _playerService.AddEntity(newPlayer);
                     if (_playerService.SaveAll())
                     {
-                        return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, PlayerViewModel>(newPlayer));
+                        return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, NewPlayerDTO>(newPlayer));
                     }
                 }
                 else

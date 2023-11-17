@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
-using matchSchedule.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,24 +56,24 @@ namespace matchSchedule.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("new")]
-        public async Task<IActionResult> Post([FromBody] TeamViewModel team)
+        public async Task<IActionResult> Post([FromBody] NewTeamDTO team)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var players = await _service.GetPlayersByIdsAsync(team.PlayerIds);
-                    var newTeam = _mapper.Map<TeamViewModel, Team>(team);
+                    var newTeam = _mapper.Map<NewTeamDTO, Team>(team);
                     newTeam.Players = players;
                     _service.AddEntity(newTeam);
                     if (_service.SaveAll())
                     {
-                        return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, TeamViewModel>(newTeam));
+                        return Created($"/api/teams/{newTeam.Id}", _mapper.Map<Team, NewTeamDTO>(newTeam));
                     }
                 }
                 else
                     return BadRequest(ModelState);
-            }
+            }S
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
