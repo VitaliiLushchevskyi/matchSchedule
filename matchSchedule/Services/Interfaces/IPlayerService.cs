@@ -1,11 +1,14 @@
-﻿using matchSchedule.Models;
+﻿using matchSchedule.Models.Errors;
+using matchSchedule.ModelsDTO;
 
 namespace matchSchedule.Services.Interfaces
 {
-    public interface IPlayerService : IBaseDataService<Player>
+    public interface IPlayerService
     {
 
-        Task<List<Player>> GetFreePlayersAsync();
+        Task<Result> GetPlayersAsync();
+        Task<Result> GetPlayerAsync(Guid id);
+        Task<Result> CreateNewPlayerAsync(NewPlayerDTO model);
 
     }
 }

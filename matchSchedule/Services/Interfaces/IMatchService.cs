@@ -1,14 +1,14 @@
-﻿using matchSchedule.Models;
+﻿using matchSchedule.Models.Errors;
 using matchSchedule.ModelsDTO;
 
 namespace matchSchedule.Services.Interfaces
 {
-    public interface IMatchService : IBaseDataService<Match>
+    public interface IMatchService
     {
 
-        Task<Tournament> GetTournamentByIdAsync(Guid id);
-        Task<Team> GetTeamByIdAsync(Guid id);
-        Task<Match> AddMatchAsync(NewMatchDTO model);
+        Task<Result> GetMatchesAsync();
+        Task<Result> GetMatchAsync(Guid id);
+        Task<Result> CreateNewMatchAsync(NewMatchDTO model);
 
     }
 }

@@ -1,11 +1,14 @@
-﻿using matchSchedule.Models;
+﻿using matchSchedule.Models.Errors;
 using matchSchedule.ModelsDTO;
 
 namespace matchSchedule.Services.Interfaces
 {
-    public interface ITournamentService : IBaseDataService<Tournament>
+    public interface ITournamentService
     {
-        Task<List<Team>> GetTeamsByIdAsync(ICollection<Guid> guids);
-        Task<Tournament> EditTournamentByIdAsync(Guid id, TournamentEditDto model);
+        Task<Result> GetTournamentsAsync();
+        Task<Result> GetTournamentAsync(Guid id);
+        Task<Result> CreateNewTournamentAsync(NewTournamentDTO model);
+        Task<Result> DeleteTournament(Guid id);
+        Task<Result> EditTournamentByIdAsync(Guid id, TournamentEditDto model);
     }
 }

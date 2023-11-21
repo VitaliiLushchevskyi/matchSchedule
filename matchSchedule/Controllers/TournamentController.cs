@@ -28,7 +28,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetAllAsync());
+                var result = await _service.GetTournamentsAsync();
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -42,7 +47,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetByIdAsync(id));
+                var result = await _service.GetTournamentAsync(id);
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -52,25 +62,21 @@ namespace matchSchedule.Controllers
         }
 
 
-        [HttpPost("new")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPost("createTournament")]
         public async Task<IActionResult> Post([FromBody] NewTournamentDTO model)
         {
             try
             {
-                if (ModelState.IsValid)
+                var result = await _service.CreateNewTournamentAsync(model);
+                if (result.IsSuccess)
                 {
-                    var teams = await _service.GetTeamsByIdAsync(model.TeamIds);
-                    var newModel = _mapper.Map<NewTournamentDTO, Tournament>(model);
-                    newModel.Teams = teams;
-                    _service.AddEntity(newModel);
-                    if (_service.SaveAll())
-                    {
-                        return Created($"/api/tournaments/{newModel.Id}", _mapper.Map<Tournament, NewTournamentDTO>(newModel));
-                    }
+                    var newTournament = (Tournament)result.Value;
+                    return Created($"/api/tournamtns/{newTournament.Id}", newTournament);
                 }
                 else
-                    return BadRequest(ModelState);
+                    return BadRequest(result.Error.Description);
+
             }
             catch (Exception ex)
             {
@@ -78,6 +84,7 @@ namespace matchSchedule.Controllers
             }
 
             return BadRequest("Failed to post the tournament!");
+
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
@@ -86,17 +93,14 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                var result = await _service.DeleteTournament(id);
+                if (result.IsSuccess)
                 {
-                    var tournament = await _service.GetByIdAsync(id);
-                    if (tournament == null)
-                        return NotFound($"The tournament with id: {id} wasn`t found");
-                    _service.RemoveEntity(tournament);
-                    if (_service.SaveAll())
-                        return NoContent();
+                    return NoContent();
                 }
                 else
-                    return BadRequest(ModelState);
+                    return BadRequest(result.Error.Description);
+
             }
             catch (Exception ex)
             {
@@ -111,22 +115,21 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                var result = await _service.EditTournamentByIdAsync(id, model);
+                if (result.IsSuccess)
                 {
-                    var editedTournament = await _service.EditTournamentByIdAsync(id, model);
-                    if (editedTournament == null)
-                        return BadRequest(NotFound());
+                    var editedTournament = (Tournament)result.Value;
                     return (Ok(editedTournament));
                 }
                 else
-                    return BadRequest(ModelState);
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
 
-            return BadRequest("Failed to post the match!");
+            return BadRequest("Couldn't edit the tournament!");
         }
 
     }

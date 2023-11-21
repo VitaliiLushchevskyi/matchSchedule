@@ -1,110 +1,65 @@
-﻿using matchSchedule.Context;
+﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.Models.Errors;
+using matchSchedule.ModelsDTO;
+using matchSchedule.Repositories.Interfaces;
 using matchSchedule.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Services.Implements
 {
     public class TeamService : ITeamService
     {
-        private readonly AppDbContext _appDbContext;
-        public TeamService(AppDbContext appDbContext)
+        private readonly ITeamRepository _repository;
+        private readonly IMapper _mapper;
+        public TeamService(ITeamRepository repository, IMapper mapper)
         {
-            _appDbContext = appDbContext;
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public async void AddEntityAsync(Team entity)
+        public async Task<Result> CreateNewTeamAsync(NewTeamDTO model)
         {
-            await _appDbContext.AddAsync(entity);
-        }
-
-        public void AddEntity(Team entity)
-        {
-            _appDbContext.AddAsync(entity);
-        }
-
-        public async Task<List<Team>> GetAllAsync()
-        {
-            return await _appDbContext.Teams
-               .Include(t => t.Players)
-               .Include(t => t.Coaches)
-               .Include(t => t.TournamentsWon)
-               .Include(t => t.Matches)
-               .OrderBy(t => t.Name)
-               .ToListAsync();
-        }
-
-        public async Task<Team> GetByIdAsync(Guid id)
-        {
-            return await _appDbContext.Teams
-                .Include(t => t.Players
-                    .OrderBy(p => p.LastName))
-                .Include(t => t.Coaches)
-                .Include(t => t.TournamentsWon)
-                .Include(t => t.Matches)
-                .Where(t => t.Id == id)
-                .FirstOrDefaultAsync();
-        }
-
-        public void RemoveEntity(Team entity)
-        {
-            _appDbContext.Remove(entity);
-        }
-
-        public bool SaveAll()
-        {
-            return _appDbContext.SaveChanges() > 0;
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Team> AddPlayerAsync(Guid teamId, Guid playerId)
-        {
-            var team = await GetByIdAsync(teamId);
-            var player = await _appDbContext.Players.Where(p => p.PlayerId == playerId).FirstOrDefaultAsync();
-            if (player == null || team == null)
-                return null;
-            team.Players.Add(player);
-            await SaveAllAsync();
-            return team;
-        }
-
-        public async Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds)
-        {
-            var team = await GetByIdAsync(teamId);
-            if (team == null)
+            if (await _repository.DoesTeamExistAsync(model.Name))
             {
-                return false;
+                return Result.Failure(TeamErrors.AlreadyExist);
+            }
+            var newTeam = _mapper.Map<NewTeamDTO, Team>(model);
+
+            if (model.PlayerIds.Count > 0)
+            {
+                var players = await _repository.GetPlayersByIdsAsync(model.PlayerIds);
+                newTeam.Players = players;
             }
 
-            if (playersIds != null && playersIds.Count > 0)
-            {
-                var playersToAdd = await _appDbContext.Players
-                    .Where(p => playersIds.Contains(p.PlayerId))
-                    .ToListAsync();
+            _repository.AddEntityAsync(newTeam);
+            if (await _repository.SaveAllAsync())
+                return Result.Success(newTeam);
 
-                if (playersToAdd.Count > 0)
-                {
-                    foreach (var player in playersToAdd)
-                    {
-                        team.Players.Add(player);
-                    }
-                    await SaveAllAsync();
-                    return true;
-                }
-
-            }
-
-            return false;
+            return Result.Failure(TeamErrors.BadRequest);
         }
 
-        public async Task<List<Player>> GetPlayersByIdsAsync(ICollection<Guid> ids)
+
+        public async Task<Result> GetTeamAsync()
         {
-            return await _appDbContext.Players.Where(player => ids.Contains(player.PlayerId)).ToListAsync();
+            var teams = await _repository.GetAllAsync();
+
+            if (teams == null)
+                return Result.Failure(TeamErrors.BadRequest);
+
+
+            if (teams.Count == 0)
+                return Result.Failure(TeamErrors.NoTeams);
+
+            return Result.Success(teams);
         }
 
+        public async Task<Result> GetTeamAsync(Guid id)
+        {
+            var team = await _repository.GetByIdAsync(id);
+            if (team != null)
+                return Result.Success(team);
+
+            return Result.Failure(TeamErrors.BadRequest);
+        }
     }
 }

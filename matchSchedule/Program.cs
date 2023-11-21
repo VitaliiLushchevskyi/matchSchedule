@@ -1,4 +1,6 @@
 using matchSchedule.Context;
+using matchSchedule.Repositories.Implements;
+using matchSchedule.Repositories.Interfaces;
 using matchSchedule.Services.Implements;
 using matchSchedule.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -54,11 +56,21 @@ builder.Services
         };
     });
 
+
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamService, TeamService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IMatchService, MatchService>();
-builder.Services.AddScoped<ITournamentService, TournamentService>();
+
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+
+builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
+builder.Services.AddScoped<ITournamentService, TournamentService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddEndpointsApiExplorer();

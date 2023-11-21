@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgToastComponent, NgToastService } from 'ng-angular-popup';
+import { catchError } from 'rxjs';
 import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
 import { Coach } from 'src/app/shared/coach';
@@ -50,9 +51,11 @@ export class NewTeamComponent implements OnInit {
         this.teamForm.reset();
       },
       error: (err) => {
+        console.log(err);
+
         this.toast.error({
           detail: 'ERROR',
-          summary: err.error.message,
+          summary: err.error,
           duration: 5000,
         });
       },

@@ -1,6 +1,6 @@
 ﻿namespace matchSchedule.Models.Errors
 {
-    public class MatchErrors
+    public class MatchErrors : BaseErrors
     {
 
         public static readonly Error SameTeams = new Error(
@@ -9,8 +9,7 @@
         public static readonly Error NotFoundTournament = new Error(
             "Matches.NotFoundTournament", "The tournament not found!");
 
-        public static readonly Error BadRequest = new Error(
-            "Matches.BadRequest", "Something went wrong!");
+
 
     }
 }

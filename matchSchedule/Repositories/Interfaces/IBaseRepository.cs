@@ -1,14 +1,14 @@
-﻿namespace matchSchedule.Services.Interfaces
+﻿namespace matchSchedule.Repositories.Interfaces
 {
-    public interface IBaseDataService<T>
+    public interface IBaseRepository<T> where T : class
     {
         Task<List<T>> GetAllAsync();
         Task<T> GetByIdAsync(Guid id);
         void AddEntity(T entity);
         void AddEntityAsync(T entity);
-        Task<bool> SaveAllAsync();
-        bool SaveAll();
         void RemoveEntity(T entity);
-
+        bool SaveAll();
+        Task<bool> SaveAllAsync();
+        void Update(T entity);
     }
 }

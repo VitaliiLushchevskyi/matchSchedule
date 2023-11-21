@@ -48,7 +48,7 @@ export class TokenInterceptor implements HttpInterceptor {
             this.router.navigate(['login']);
           }
         }
-        return throwError(() => new Error('Unknown error!'));
+        return throwError(() => err);
       })
     );
   }

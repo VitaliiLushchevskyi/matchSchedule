@@ -1,11 +1,13 @@
-﻿using matchSchedule.Models;
+﻿using matchSchedule.Models.Errors;
+using matchSchedule.ModelsDTO;
 
 namespace matchSchedule.Services.Interfaces
 {
-    public interface ITeamService : IBaseDataService<Team>
+    public interface ITeamService
     {
-        Task<List<Player>> GetPlayersByIdsAsync(ICollection<Guid> ids);
-        Task<Team> AddPlayerAsync(Guid teamId, Guid playerId);
-        Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds);
+        Task<Result> GetTeamAsync();
+        Task<Result> GetTeamAsync(Guid id);
+        Task<Result> CreateNewTeamAsync(NewTeamDTO model);
+
     }
 }

@@ -1,67 +1,52 @@
-﻿using matchSchedule.Context;
+﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.Models.Errors;
+using matchSchedule.ModelsDTO;
+using matchSchedule.Repositories.Interfaces;
 using matchSchedule.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Services.Implements
 {
     public class PlayerService : IPlayerService
     {
-        private readonly AppDbContext _appDbContext;
-        public PlayerService(AppDbContext appDbContext)
+        private readonly IPlayerRepository _repository;
+        private readonly IMapper _mapper;
+        public PlayerService(IPlayerRepository repository, IMapper mapper)
         {
-            _appDbContext = appDbContext;
-        }
-        public async Task<List<Player>> GetAllAsync()
-        {
-            return await _appDbContext.Players
-                .Include(p => p.TeamHistory)
-                .Include(p => p.Team)
-                .OrderBy(p => p.LastName)
-                .ToListAsync();
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<Player> GetPlayerByIdAsync(Guid id)
+        public async Task<Result> CreateNewPlayerAsync(NewPlayerDTO model)
         {
-            return await _appDbContext.Players
-                .Include(p => p.TeamHistory)
-                .Where(p => p.PlayerId == id)
-                .FirstOrDefaultAsync();
+            var newPlayer = _mapper.Map<NewPlayerDTO, Player>(model);
+
+            _repository.AddEntityAsync(newPlayer);
+            if (await _repository.SaveAllAsync())
+                return Result.Success(newPlayer);
+
+            return Result.Failure(BaseErrors.BadRequest);
         }
 
-        public async Task<bool> SaveAllAsync()
+
+        public async Task<Result> GetPlayersAsync()
         {
-            return await _appDbContext.SaveChangesAsync() > 0;
+            var players = await _repository.GetAllAsync();
+
+            if (players == null)
+                return Result.Failure(BaseErrors.BadRequest);
+
+            return Result.Success(players);
         }
 
-        public bool SaveAll()
+        public async Task<Result> GetPlayerAsync(Guid id)
         {
-            return _appDbContext.SaveChanges() > 0;
+            var player = await _repository.GetByIdAsync(id);
+            if (player != null)
+                return Result.Success(player);
+
+            return Result.Failure(BaseErrors.BadRequest);
         }
 
-        public async Task<List<Player>> GetFreePlayersAsync()
-        {
-            return await _appDbContext.Players.Where(p => p.TeamId == null).ToListAsync();
-        }
-
-        public Task<Player> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddEntity(Player entity)
-        {
-            _appDbContext.Add(entity);
-        }
-
-        public async void AddEntityAsync(Player entity)
-        {
-            await _appDbContext.AddAsync(entity);
-        }
-
-        public void RemoveEntity(Player entity)
-        {
-            _appDbContext.Remove(entity);
-        }
     }
 }

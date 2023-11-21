@@ -1,86 +1,87 @@
-﻿using matchSchedule.Context;
+﻿using AutoMapper;
 using matchSchedule.Models;
+using matchSchedule.Models.Errors;
 using matchSchedule.ModelsDTO;
+using matchSchedule.Repositories.Interfaces;
 using matchSchedule.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Services.Implements
 {
     public class TournamentService : ITournamentService
     {
-        private readonly AppDbContext _appDbContext;
-        public TournamentService(AppDbContext appDbContext)
+        private readonly ITournamentRepository _repository;
+        private readonly IMapper _mapper;
+        public TournamentService(ITournamentRepository repository, IMapper mapper)
         {
-            _appDbContext = appDbContext;
-        }
-        public async Task<List<Tournament>> GetAllAsync()
-        {
-            return await _appDbContext.Tournaments
-                .Include(t => t.Teams)
-                .Include(t => t.Matches.OrderBy(m => m.MatchDateTime))
-                .Include(t => t.Matches)
-                    .ThenInclude(i => i.HomeTeam)
-                .Include(t => t.Matches)
-                    .ThenInclude(i => i.AwayTeam)
-                .OrderBy(t => t.Name)
-                .ToListAsync();
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<Tournament> GetByIdAsync(Guid id)
+        public async Task<Result> CreateNewTournamentAsync(NewTournamentDTO model)
         {
-            return await _appDbContext.Tournaments
-                .Include(t => t.Teams)
-                .Include(t => t.Matches)
-                .Where(t => t.Id == id)
-                .FirstOrDefaultAsync();
+            var newTournament = _mapper.Map<NewTournamentDTO, Tournament>(model);
+
+            _repository.AddEntityAsync(newTournament);
+            if (await _repository.SaveAllAsync())
+                return Result.Success(newTournament);
+
+            return Result.Failure(BaseErrors.BadRequest);
         }
 
-        public void AddEntity(Tournament entity)
+
+        public async Task<Result> GetTournamentsAsync()
         {
-            _appDbContext.Add(entity);
+            var tournaments = await _repository.GetAllAsync();
+
+            if (tournaments == null)
+                return Result.Failure(BaseErrors.BadRequest);
+
+            return Result.Success(tournaments);
         }
 
-        public async void AddEntityAsync(Tournament entity)
+        public async Task<Result> GetTournamentAsync(Guid id)
         {
-            await _appDbContext.AddAsync(entity);
+            var tournament = await _repository.GetByIdAsync(id);
+            if (tournament != null)
+                return Result.Success(tournament);
+
+            return Result.Failure(BaseErrors.BadRequest);
         }
 
-        public void RemoveEntity(Tournament entity)
+        public async Task<Result> DeleteTournament(Guid id)
         {
-            _appDbContext.Remove(entity);
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
-        public bool SaveAll()
-        {
-            return _appDbContext.SaveChanges() > 0;
-        }
-
-        public async Task<List<Team>> GetTeamsByIdAsync(ICollection<Guid> guids)
-        {
-            return await _appDbContext.Teams.Where(teams => guids.Contains(teams.Id)).ToListAsync();
-        }
-
-        public async Task<Tournament> EditTournamentByIdAsync(Guid id, TournamentEditDto model)
-        {
-            var tournament = await GetByIdAsync(id);
+            var tournament = await _repository.GetByIdAsync(id);
             if (tournament == null)
-                return null;
+                return Result.Failure(TournamentErrors.NotFoundTournament);
+            _repository.RemoveEntity(tournament);
+            if (await _repository.SaveAllAsync())
+                return Result.Success();
+            else
+                return Result.Failure(BaseErrors.BadRequest);
+
+        }
+
+        public async Task<Result> EditTournamentByIdAsync(Guid id, TournamentEditDto model)
+        {
+            var tournament = await _repository.GetByIdAsync(id);
+            if (tournament == null)
+                return Result.Failure(TournamentErrors.NotFoundTournament);
+
             tournament.Name = model.Name;
             tournament.Location = model.Location;
             tournament.StartDate = model.StartDate;
             tournament.EndDate = model.EndDate;
             tournament.Description = model.Description;
-            _appDbContext.Entry(tournament).State = EntityState.Modified;
-            if (await SaveAllAsync())
+
+            _repository.Update(tournament);
+            if (await _repository.SaveAllAsync())
             {
-                return tournament;
+                return Result.Success(tournament);
             }
-            else { return null; }
+            else
+                return Result.Failure(BaseErrors.BadRequest);
 
         }
+
     }
 }

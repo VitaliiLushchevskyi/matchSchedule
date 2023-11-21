@@ -1,94 +1,55 @@
 ﻿using AutoMapper;
-using matchSchedule.Context;
 using matchSchedule.Models;
+using matchSchedule.Models.Errors;
 using matchSchedule.ModelsDTO;
+using matchSchedule.Repositories.Interfaces;
 using matchSchedule.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace matchSchedule.Services.Implements
 {
     public class MatchService : IMatchService
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IMatchRepository _repository;
         private readonly IMapper _mapper;
-        public MatchService(AppDbContext appDbContext, IMapper mapper)
+        public MatchService(IMatchRepository repository, IMapper mapper)
         {
-            _appDbContext = appDbContext;
+            _repository = repository;
             _mapper = mapper;
         }
-        public async Task<List<Match>> GetAllAsync()
-        {
-            return await _appDbContext.Matches
-                .Include(m => m.AwayTeam)
-                .Include(m => m.HomeTeam)
-                .Include(m => m.Tournament)
-                .ToListAsync();
-        }
 
-        public async Task<Match> GetByIdAsync(Guid id)
+        public async Task<Result> CreateNewMatchAsync(NewMatchDTO model)
         {
-            return await _appDbContext.Matches
-                .Where(m => m.MatchId == id)
-                .FirstOrDefaultAsync();
-        }
-        public async Task<Tournament> GetTournamentByIdAsync(Guid id)
-        {
-            return await _appDbContext.Tournaments
-                .Include(t => t.Teams)
-                .Include(t => t.Matches)
-                .Where(t => t.Id == id)
-                .FirstOrDefaultAsync();
-        }
+            var newMatch = _mapper.Map<NewMatchDTO, Match>(model);
 
-        public async Task<Team> GetTeamByIdAsync(Guid id)
-        {
-            return await _appDbContext.Teams
-                .Include(t => t.Players)
-                .Include(t => t.Coaches)
-                .Include(t => t.TournamentsWon)
-                .Include(t => t.Matches)
-                .Where(t => t.Id == id)
-                .FirstOrDefaultAsync();
-        }
-        public async Task<Match> AddMatchAsync(NewMatchDTO model)
-        {
-            var tournament = await GetTournamentByIdAsync(model.Tournament.Id);
-            var homeTeam = await GetTeamByIdAsync(model.HomeTeamId);
-            var awayTeam = await GetTeamByIdAsync(model.AwayTeamId);
-            var newModel = _mapper.Map<NewMatchDTO, Match>(model);
-            newModel.Tournament = tournament;
-            newModel.HomeTeam = homeTeam;
-            newModel.AwayTeam = awayTeam;
-            AddEntityAsync(newModel);
-            if (await SaveAllAsync())
-                return newModel;
-            return null;
-        }
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _appDbContext.SaveChangesAsync() > 0;
-        }
+            _repository.AddEntityAsync(newMatch);
+            if (await _repository.SaveAllAsync())
+                return Result.Success(newMatch);
 
-        public bool SaveAll()
-        {
-            return _appDbContext.SaveChanges() > 0;
-        }
-
-        public void AddEntity(Match entity)
-        {
-            _appDbContext.Add(entity);
-        }
-
-        public async void AddEntityAsync(Match entity)
-        {
-            await _appDbContext.AddAsync(entity);
-        }
-
-        public void RemoveEntity(Match entity)
-        {
-            _appDbContext.Remove(entity);
+            return Result.Failure(MatchErrors.BadRequest);
         }
 
 
+        public async Task<Result> GetMatchesAsync()
+        {
+            var matches = await _repository.GetAllAsync();
+
+            if (matches == null)
+                return Result.Failure(MatchErrors.BadRequest);
+
+
+            //if (matches.Count == 0)
+            //    return Result.Failure(MatchesErrors.NoMatches);
+
+            return Result.Success(matches);
+        }
+
+        public async Task<Result> GetMatchAsync(Guid id)
+        {
+            var match = await _repository.GetByIdAsync(id);
+            if (match != null)
+                return Result.Success(match);
+
+            return Result.Failure(MatchErrors.BadRequest);
+        }
     }
 }

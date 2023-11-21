@@ -12,13 +12,13 @@ namespace matchSchedule.Controllers
     [ApiController]
     public class PlayerController : ControllerBase
     {
-        private readonly IPlayerService _playerService;
+        private readonly IPlayerService _service;
         private readonly ILogger<PlayerController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         public PlayerController(IPlayerService playerService, ILogger<PlayerController> logger, IMapper mapper)
         {
-            _playerService = playerService;
+            _service = playerService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -29,21 +29,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _playerService.GetAllAsync());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest("Failed to get players!");
-            }
-        }
+                var result = await _service.GetPlayersAsync();
+                if (result.IsSuccess)
+                    return Ok(result.Value);
 
-        [HttpGet("players/free")]
-        public async Task<IActionResult> GetFreePlayers()
-        {
-            try
-            {
-                return Ok(await _playerService.GetFreePlayersAsync());
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -57,7 +48,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _playerService.GetByIdAsync(id));
+                var result = await _service.GetPlayerAsync(id);
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -66,24 +62,22 @@ namespace matchSchedule.Controllers
             }
         }
 
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        [HttpPost]
-        [Route("createPlayer")]
-        public IActionResult Post([FromBody] NewPlayerDTO player)
+        [HttpPost("createPlayer")]
+        public async Task<IActionResult> Post([FromBody] NewPlayerDTO model)
         {
             try
             {
-                if (ModelState.IsValid)
+                var result = await _service.CreateNewPlayerAsync(model);
+                if (result.IsSuccess)
                 {
-                    var newPlayer = _mapper.Map<NewPlayerDTO, Player>(player);
-                    _playerService.AddEntity(newPlayer);
-                    if (_playerService.SaveAll())
-                    {
-                        return Created($"/api/players/{newPlayer.PlayerId}", _mapper.Map<Player, NewPlayerDTO>(newPlayer));
-                    }
+                    var newPlayer = (Player)result.Value;
+                    return Created($"/api/players/{newPlayer.PlayerId}", newPlayer);
                 }
                 else
-                    return BadRequest(ModelState);
+                    return BadRequest(result.Error.Description);
+
             }
             catch (Exception ex)
             {
@@ -91,6 +85,25 @@ namespace matchSchedule.Controllers
             }
 
             return BadRequest("Failed to post the player!");
+
         }
+
+
+
+        //[HttpGet("players/free")]
+        //public async Task<IActionResult> GetFreePlayers()
+        //{
+        //    try
+        //    {
+        //        return Ok(await _playerService.GetFreePlayersAsync());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex.Message);
+        //        return BadRequest("Failed to get players!");
+        //    }
+        //}
+
+
     }
 }

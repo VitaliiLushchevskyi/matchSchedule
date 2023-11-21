@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using matchSchedule.Models.Errors;
+using matchSchedule.Models;
 using matchSchedule.ModelsDTO;
 using matchSchedule.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,7 +28,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetAllAsync());
+                var result = await _service.GetMatchesAsync();
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -42,7 +47,12 @@ namespace matchSchedule.Controllers
         {
             try
             {
-                return Ok(await _service.GetByIdAsync(id));
+                var result = await _service.GetMatchAsync(id);
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                else
+                    return BadRequest(result.Error.Description);
             }
             catch (Exception ex)
             {
@@ -54,20 +64,27 @@ namespace matchSchedule.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpPost("createMatch")]
-        public async Task<Result> Post([FromBody] NewMatchDTO model)
+        public async Task<IActionResult> Post([FromBody] NewMatchDTO model)
         {
-            if (model.AwayTeamId == model.HomeTeamId)
-                return Result.Failure(MatchErrors.SameTeams);
+            try
+            {
+                var result = await _service.CreateNewMatchAsync(model);
+                if (result.IsSuccess)
+                {
+                    var newMatch = (Match)result.Value;
+                    return Created($"/api/matches/{newMatch.MatchId}", newMatch);
+                }
+                else
+                    return BadRequest(result.Error.Description);
 
-            if (model.Tournament == null)
-                return Result.Failure(MatchErrors.NotFoundTournament);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
-            var createdMatch = await _service.AddMatchAsync(model);
+            return BadRequest("Failed to post the match!");
 
-            if (createdMatch != null)
-                return Result.Success();
-
-            return Result.Failure(MatchErrors.BadRequest);
         }
 
     }
