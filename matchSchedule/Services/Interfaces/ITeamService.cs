@@ -8,6 +8,8 @@ namespace matchSchedule.Services.Interfaces
         Task<Result> GetTeamAsync();
         Task<Result> GetTeamAsync(Guid id);
         Task<Result> CreateNewTeamAsync(NewTeamDTO model);
-
+        Task<Result> DeleteTeamAsync(Guid id);
+        Task<Result> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds);
+        Task<Result> AddPlayerAsync(Guid teamId, Guid playerId);
     }
 }

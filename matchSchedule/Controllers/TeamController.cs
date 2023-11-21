@@ -89,63 +89,59 @@ namespace matchSchedule.Controllers
             return BadRequest("Failed to post the team!");
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        //[HttpPost]
-        //[Route("{teamId:Guid}/addPlayer/{playerId:Guid}")]
-        //public async Task<IActionResult> Post(Guid teamId, Guid playerId)
-        //{
-        //    try
-        //    {
-        //        var result = await _service.AddPlayerAsync(teamId, playerId);
-        //        if (result == null)
-        //        {
-        //            return BadRequest("Invalid team or player!");
-        //        }
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        return BadRequest("Failed to add player to the team!");
-        //    }
-        //}
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPost]
+        [Route("{teamId:Guid}/addPlayer/{playerId:Guid}")]
+        public async Task<IActionResult> Post(Guid teamId, Guid playerId)
+        {
+            try
+            {
+                var result = await _service.AddPlayerAsync(teamId, playerId);
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+                else
+                    return BadRequest(result.Error.Description);
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        //[HttpPost]
-        //[Route("{teamId:Guid}/addListOfPlayers")]
-        //public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)
-        //{
-        //    var result = await _service.AddListOfPlayersAsync(teamId, playersIds);
-        //    if (result)
-        //        return Ok("Successful!");
-        //    else
-        //        return BadRequest("Failed!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to add player to the team!");
+            }
+        }
 
-        //}
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        //[HttpDelete("{id:Guid}")]
-        //public async Task<IActionResult> Delete(Guid id)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var tournament = await _service.GetByIdAsync(id);
-        //            if (tournament == null)
-        //                return NotFound($"The team with id: {id} wasn`t found");
-        //            _service.RemoveEntity(tournament);
-        //            if (_service.SaveAll())
-        //                return NoContent();
-        //        }
-        //        else
-        //            return BadRequest(ModelState);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //    }
-        //    return BadRequest(new { Message = "Failed to delete the team!" });
-        //}
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPost]
+        [Route("{teamId:Guid}/addListOfPlayers")]
+        public async Task<IActionResult> Post(Guid teamId, [FromBody] List<Guid> playersIds)
+        {
+            var result = await _service.AddListOfPlayersAsync(teamId, playersIds);
+
+            if (result.IsSuccess)
+                return Ok(result.Value);
+            else
+                return BadRequest(result.Error.Description);
+
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                var result = await _service.DeleteTeamAsync(id);
+                if (result.IsSuccess)
+                    return NoContent();
+                else
+                    return BadRequest(result.Error.Description);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest(new { Message = "Failed to delete the team!" });
+        }
 
 
     }

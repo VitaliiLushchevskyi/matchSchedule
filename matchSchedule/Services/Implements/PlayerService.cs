@@ -57,5 +57,6 @@ namespace matchSchedule.Services.Implements
                 return Result.Failure(PlayerErrors.NoFreePlayers);
             return Result.Success(players);
         }
+
     }
 }

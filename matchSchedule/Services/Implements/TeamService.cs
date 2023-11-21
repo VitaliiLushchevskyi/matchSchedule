@@ -35,9 +35,20 @@ namespace matchSchedule.Services.Implements
             if (await _repository.SaveAllAsync())
                 return Result.Success(newTeam);
 
-            return Result.Failure(TeamErrors.BadRequest);
+            return Result.Failure(BaseErrors.BadRequest);
         }
 
+        public async Task<Result> DeleteTeamAsync(Guid id)
+        {
+            var team = await _repository.GetByIdAsync(id);
+            if (team == null)
+                return Result.Failure(BaseErrors.NotFound);
+            _repository.RemoveEntity(team);
+            if (await _repository.SaveAllAsync())
+                return Result.Success();
+            else
+                return Result.Failure(BaseErrors.BadRequest);
+        }
 
         public async Task<Result> GetTeamAsync()
         {
@@ -59,7 +70,47 @@ namespace matchSchedule.Services.Implements
             if (team != null)
                 return Result.Success(team);
 
-            return Result.Failure(TeamErrors.BadRequest);
+            return Result.Failure(BaseErrors.BadRequest);
+        }
+        public async Task<Result> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds)
+        {
+            var team = await _repository.GetByIdAsync(teamId);
+            if (team == null)
+            {
+                return Result.Failure(BaseErrors.NotFound);
+            }
+
+            if (playersIds != null && playersIds.Count > 0)
+            {
+                var playersToAdd = await _repository.GetPlayersByIdsAsync(playersIds);
+
+                if (playersToAdd.Count > 0)
+                {
+                    foreach (var player in playersToAdd)
+                    {
+                        team.Players.Add(player);
+                    }
+                    await _repository.SaveAllAsync();
+                    return Result.Success(team);
+                }
+
+            }
+
+            return Result.Failure(BaseErrors.BadRequest);
+        }
+
+        public async Task<Result> AddPlayerAsync(Guid teamId, Guid playerId)
+        {
+            var team = _repository.GetByIdAsync(teamId);
+            if (team == null)
+                return Result.Failure(BaseErrors.NotFound);
+            var player = await _repository.GetPlayerByIdAsync(playerId);
+            if (player == null)
+                return Result.Failure(BaseErrors.NotFound);
+            team.Result.Players.Add(player);
+            if (await _repository.SaveAllAsync())
+                return Result.Success(team);
+            return Result.Failure(BaseErrors.BadRequest);
         }
     }
 }

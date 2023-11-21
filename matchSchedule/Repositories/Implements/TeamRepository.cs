@@ -40,49 +40,16 @@ namespace matchSchedule.Repositories.Implements
             return await _context.Teams.AnyAsync(team => team.Name == teamName);
         }
 
-        public async Task<Team> AddPlayerAsync(Guid teamId, Guid playerId)
-        {
-            var team = await GetByIdAsync(teamId);
-            var player = await _context.Players.Where(p => p.PlayerId == playerId).FirstOrDefaultAsync();
-            if (player == null || team == null)
-                return null;
-            team.Players.Add(player);
-            await SaveAllAsync();
-            return team;
-        }
-
-        public async Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds)
-        {
-            var team = await GetByIdAsync(teamId);
-            if (team == null)
-            {
-                return false;
-            }
-
-            if (playersIds != null && playersIds.Count > 0)
-            {
-                var playersToAdd = await _context.Players
-                    .Where(p => playersIds.Contains(p.PlayerId))
-                    .ToListAsync();
-
-                if (playersToAdd.Count > 0)
-                {
-                    foreach (var player in playersToAdd)
-                    {
-                        team.Players.Add(player);
-                    }
-                    await SaveAllAsync();
-                    return true;
-                }
-
-            }
-
-            return false;
-        }
 
         public async Task<List<Player>> GetPlayersByIdsAsync(ICollection<Guid> ids)
         {
             return await _context.Players.Where(player => ids.Contains(player.PlayerId)).ToListAsync();
+        }
+
+        public Task<Player> GetPlayerByIdAsync(Guid playerId)
+        {
+            return _context.Players.Where(p => p.PlayerId == playerId)
+                .FirstOrDefaultAsync();
         }
     }
 }

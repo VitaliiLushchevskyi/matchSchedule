@@ -6,8 +6,7 @@ namespace matchSchedule.Repositories.Interfaces
     {
 
         Task<List<Player>> GetPlayersByIdsAsync(ICollection<Guid> ids);
-        Task<Team> AddPlayerAsync(Guid teamId, Guid playerId);
-        Task<bool> AddListOfPlayersAsync(Guid teamId, List<Guid> playersIds);
+        Task<Player> GetPlayerByIdAsync(Guid playerId);
         Task<bool> DoesTeamExistAsync(string teamName);
     }
 }
