@@ -48,5 +48,14 @@ namespace matchSchedule.Services.Implements
             return Result.Failure(BaseErrors.BadRequest);
         }
 
+        public async Task<Result> GetFreePlayersAsync()
+        {
+            var players = await _repository.GetFreePlayersAsync();
+            if (players == null)
+                return Result.Failure(BaseErrors.BadRequest);
+            if (players.Count == 0)
+                return Result.Failure(PlayerErrors.NoFreePlayers);
+            return Result.Success(players);
+        }
     }
 }

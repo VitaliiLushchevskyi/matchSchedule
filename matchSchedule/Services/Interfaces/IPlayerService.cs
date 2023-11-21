@@ -9,6 +9,6 @@ namespace matchSchedule.Services.Interfaces
         Task<Result> GetPlayersAsync();
         Task<Result> GetPlayerAsync(Guid id);
         Task<Result> CreateNewPlayerAsync(NewPlayerDTO model);
-
+        Task<Result> GetFreePlayersAsync();
     }
 }

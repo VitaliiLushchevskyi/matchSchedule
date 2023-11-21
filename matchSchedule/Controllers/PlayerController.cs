@@ -88,21 +88,24 @@ namespace matchSchedule.Controllers
 
         }
 
-
-
-        //[HttpGet("players/free")]
-        //public async Task<IActionResult> GetFreePlayers()
-        //{
-        //    try
-        //    {
-        //        return Ok(await _playerService.GetFreePlayersAsync());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        return BadRequest("Failed to get players!");
-        //    }
-        //}
+        [HttpGet("players/free")]
+        public async Task<IActionResult> GetFreePlayers()
+        {
+            try
+            {
+                var result = await _service.GetFreePlayersAsync();
+                var freePlayers = result.Value;
+                if (result.IsSuccess)
+                    return Ok(freePlayers);
+                else
+                    return BadRequest(result.Error.Description);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Failed to get free players!");
+            }
+        }
 
 
     }
